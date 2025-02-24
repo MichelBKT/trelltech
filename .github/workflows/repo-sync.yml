@@ -1,0 +1,28 @@
+name: Repo Sync
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # Exécute toutes les 15 minutes
+  workflow_dispatch:
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v3
+
+      - name: Sync repo to branch
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: ${{ secrets.SOURCE_REPO }}  # Nom du repo source
+          source_branch: main                       # Branche source
+          destination_branch: main                  # Branche destination
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Token GitHub pour l'authentification
+
+      - name: Create pull request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: main                       # Branche source pour PR
+          destination_branch: main                  # Branche destination pour PR
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Token GitHub pour l'authentification
