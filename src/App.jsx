@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-     <h1 className={"bg-blue-800 text-white font-bold w-full h-24 content-center"}>TrellTech Bienvenue ! à supp</h1>
+     <h1 className={"bg-blue-800 text-white font-bold w-full h-24 content-center"}>TrellTech Bienvenue ! Bg bleu centrer tailwind ok à supp</h1>
     </>
   )
 }
