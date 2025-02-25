@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 body {
   margin: 0;
   padding: 0;
@@ -74,3 +75,7 @@ button:focus-visible {
   }
 >>>>>>> 7efa054 ([INIT] Vite & React)
 }
+=======
+@import "tailwindcss";
+
+>>>>>>> 632e423 ([INIT] TailwindCSS)
