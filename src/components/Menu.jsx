@@ -12,6 +12,7 @@ import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
 
 export default function Menu() {
     const [darkMode, setDarkMode] = useState(false);
+    const [isMenuOpen, setisMenuOpen] = useState(true);
 
     useEffect(() => {
         if (Cookies.get('dark') === 'true') {
@@ -19,6 +20,19 @@ export default function Menu() {
             setDarkMode(true);
         }
     }, []);
+
+    useEffect(() => {
+        const menu = document.querySelector('aside');
+        if (isMenuOpen) {
+            menu.classList.add('w-64');
+            menu.classList.remove('w-20');
+            setisMenuOpen(true);
+        } else {
+            menu.classList.add('w-20');
+            menu.classList.remove('w-64');
+            setisMenuOpen(false);
+        }
+    }, [isMenuOpen]);
 
     const toggleDarkMode = () => {
         const newDarkMode = !darkMode;
@@ -34,57 +48,57 @@ export default function Menu() {
 
     return (
         <>
-            <aside className="flex">
-                <div className="flex flex-col items-center w-20 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800">
-                    <a href="#"
-                       className="p-2 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8">
-                        <ToggleMenu/>
-                    </a>
+            <aside className="flex flex-col w-20 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800">
+                <button type="button"
+                        className="p-2 text-gray-500 focus:outline-none cursor-pointer transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8"
+                        onClick={() => {setisMenuOpen(!isMenuOpen);}}
+                >
+                    <ToggleMenu/>
+                </button>
 
-                    <a href="#"
-                       className="p-2 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8">
-                        <BrandWhiteIcon />
-                    </a>
+                <a href="#"
+                   className="p-2 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8">
+                    <BrandWhiteIcon />
+                </a>
 
-                    <a href="#"
-                       className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                        <Home/>
-                    </a>
+                <a href="#"
+                   className="p-4 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <Home/>
+                </a>
 
-                    <a href="#"
-                       className="p-2 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                        <Suitcase />
-                    </a>
+                <a href="#"
+                   className="p-4 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <Suitcase />
+                </a>
 
-                    <a href="#"
-                       className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                        <Workspace color={"#ECB500"}/>
-                    </a>
+                <a href="#"
+                   className="p-3 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <Workspace color={"#ECB500"}/>
+                </a>
 
-                    <a href="#"
-                       className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                        <Workspace color={"#23C000"}/>
-                    </a>
+                <a href="#"
+                   className="p-3 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <Workspace color={"#23C000"}/>
+                </a>
 
-                    <a href="#"
-                       className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                        <Workspace color={"#21A6C3"}/>
-                    </a>
+                <a href="#"
+                   className="p-3 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <Workspace color={"#21A6C3"}/>
+                </a>
 
-                    <a href="#"
-                         className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                          <Members/>
-                    </a>
+                <a href="#"
+                   className="p-3 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                      <Members/>
+                </a>
 
-                    <a href="#"
-                         className="p-3 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                          <Person/>
-                    </a>
+                <a href="#"
+                   className="p-3 pl-5 text-gray-500 focus:outline-none transition-colors duration-200 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                      <Person/>
+                </a>
 
-                    <button type="button" className="mt-auto cursor-pointer" onClick={toggleDarkMode}>
-                        {darkMode ? <ToggleOnDarkMode /> : <ToggleOffDarkMode/>}
-                    </button>
-                </div>
+                <button type="button" className="mt-auto cursor-pointer" onClick={toggleDarkMode}>
+                    {darkMode ? <ToggleOnDarkMode /> : <ToggleOffDarkMode/>}
+                </button>
             </aside>
         </>
     );
