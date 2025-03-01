@@ -59,7 +59,7 @@ export default function Menu() {
                 <a href="#"
                    className={`${isMenuOpen ? "font-extrabold text-4xl bg-gradient-to-b  from-blue-400 to-purple-500 bg-clip-text text-transparent" : "p-2 flex-row text-gray-500 focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8"} flex flex-row p-2`} >
                     <BrandWhiteIcon />
-                    {`${isMenuOpen ? "Agilix" : ""}`}
+                    {`${isMenuOpen ? "AGILIX" : ""}`}
                 </a>
 
                 <a href="#"
