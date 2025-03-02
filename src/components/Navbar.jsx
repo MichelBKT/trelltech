@@ -13,19 +13,10 @@ export default function Navbar() {
                 <div className={"w-full flex flex-row items-center justify-end"}>
                     <Notification />
                 </div>
-                <div className={"p-2 pl-6 w-100 text-black dark:text-gray-300 items-center flex flex-row text-xl justify-end"}>
-                    Bonjour John
-                </div>
-                <div className={"p-2 pl-6 w-32 text-black dark:text-gray-500 items-center flex flex-row text-xl justify-end"}>
-                    <Person />
-                </div>
-                <div className={"w-full flex flex-row items-center justify-end"}>
-                    <Notification />
-                </div>
                 <div className={"p-2 pl-6 w-100 text-black dark:text-gray-300 items-center flex flex-row justify-end"}>
                     Bonjour John
                 </div>
-                <div className={"p-2 px-6 w-32 cursor-pointer text-black dark:text-gray-500 items-center flex flex-row justify-end"}>
+                <div className={"p-2 pl-6 w-32 text-black dark:text-gray-500 items-center flex flex-row text-xl justify-end"}>
                     <Person />
                 </div>
             </div>
