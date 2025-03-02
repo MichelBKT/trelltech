@@ -11,9 +11,9 @@ import Menu from "./components/Menu.jsx";
 export default function App() {
 
   return (
-    <>
+    <div className={"flex w-full h-full "}>
         <Menu/>
-    </>
+    </div>
   )
 }
 

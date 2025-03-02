@@ -9,6 +9,7 @@ import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
+import Navbar from "./Navbar.jsx";
 
 export default function Menu() {
     const [darkMode, setDarkMode] = useState(false);
@@ -147,6 +148,7 @@ export default function Menu() {
                     {`${isMenuOpen ? "Thème" : ""}`}
                 </button>
             </aside>
+            <Navbar/>
         </>
     );
 }
