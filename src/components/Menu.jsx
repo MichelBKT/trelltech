@@ -128,7 +128,7 @@ export default function Menu() {
                 </a>
 
                 <a href="#"
-                   className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100`}>
+                   className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-500 dark:hover:bg-gray-800 hover:bg-gray-100`}>
                       <Person/>
                         <span className={`${isMenuOpen ? "w-48 pl-2 flex flex-row justify-between" : "hidden"}`}>
                             {`${isMenuOpen ? "Mike Steal" : ""}`}
