@@ -9,7 +9,7 @@ import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
-import Navbar from "./Navbar.jsx";
+
 
 export default function Menu() {
     const [darkMode, setDarkMode] = useState(false);
@@ -49,8 +49,8 @@ export default function Menu() {
     };
 
     return (
-        <>
-            <aside className="flex flex-col w-20 duration-1000 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800">
+        <div className={"fixed top-0 left-0 h-full w-64 z-50"}>
+            <aside className="flex flex-col w-20 duration-1000 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800 z-50">
                 <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex text-gray-500 focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={() => {setIsMenuOpen(!isMenuOpen);}}>
                     <ToggleMenu/>
                 </button>
@@ -130,9 +130,7 @@ export default function Menu() {
                 </button>
 
             </aside>
-            
-            <Navbar/>
-        </>
+        </div>
     );
 }
 

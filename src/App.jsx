@@ -1,5 +1,7 @@
 import './App.css';
 import Menu from "./components/Menu.jsx";
+import Navbar from "./components/Navbar.jsx";
+import MainApp from "./components/MainApp.jsx";
 
 //
 // const env = {
@@ -11,9 +13,19 @@ import Menu from "./components/Menu.jsx";
 export default function App() {
 
   return (
-    <div className={"flex w-full h-full "}>
-        <Menu/>
-    </div>
+      <>
+          <div className="relative h-screen">
+              <Menu className="z-50" />
+              <div className="flex flex-col h-full">
+                  <Navbar className="z-10"/>
+                  <MainApp />
+              </div>
+          </div>
+      </>
+
+
+
+
   )
 }
 
