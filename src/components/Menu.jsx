@@ -8,9 +8,10 @@ import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
-import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMembers } from "../api/trelloApi";
+import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMembers, inviteMember } from "../api/trelloApi";
 import WorkspaceItem from "./workspace/WorkspaceItem.jsx";
 import CreateWorkspaceModal from "./workspace/CreateWorkspaceModal.jsx";
+import MembersList from "./workspace/MembersList.jsx";
 
 export default function Menu({ onWorkspaceSelect }) {
     const [darkMode, setDarkMode] = useState(false);
@@ -138,6 +139,16 @@ export default function Menu({ onWorkspaceSelect }) {
         setBoardMembers(members);
     };
 
+    const handleInviteMember = async (email) => {
+        if (selectedBoard) {
+            const success = await inviteMember(selectedBoard.id, email);
+            if (success) {
+                const updatedMembers = await getBoardMembers(selectedBoard.id);
+                setBoardMembers(updatedMembers);
+            }
+        }
+    };
+
     return (
         <div className={"fixed top-0 left-0 h-full w-64 z-50"}>
             <aside className="flex flex-col w-20 duration-1000 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800 z-50">
@@ -188,43 +199,12 @@ export default function Menu({ onWorkspaceSelect }) {
                     </div>
                 ))}
 
-                <div className="p-4 pl-6 text-gray-900 font-bold flex flex-col focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                    <div className="flex flex-row items-center">
-                        <Members/>
-                        <span className="pl-2">
-                            {`${isMenuOpen ? "Membres" : ""}`}
-                        </span>
-                    </div>
-                    {isMenuOpen && boardMembers.length > 0 && (
-                        <div className="mt-2 pl-6">
-                            {boardMembers.map((member) => (
-                                <div key={member.id} className="flex items-center py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2">
-                                    {member.avatarUrl ? (
-                                        <img 
-                                            src={member.avatarUrl} 
-                                            alt={member.fullName}
-                                            className="w-8 h-8 rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
-                                            <span className="text-sm text-gray-600 dark:text-gray-300">
-                                                {member.fullName.charAt(0)}
-                                            </span>
-                                        </div>
-                                    )}
-                                    <div className="ml-3">
-                                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                            {member.fullName}
-                                        </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400 block">
-                                            {member.username}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                <MembersList 
+                    isMenuOpen={isMenuOpen}
+                    selectedBoard={selectedBoard}
+                    boardMembers={boardMembers}
+                    onInviteMember={handleInviteMember}
+                />
 
                 <a href="#" className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100`}>
                     <Person/>

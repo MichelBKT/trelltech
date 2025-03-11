@@ -21,7 +21,6 @@ export default function App() {
     useEffect(() => {
         if (notificationManagerRef.current) {
             setNotificationManager(notificationManagerRef.current);
-            console.log('NotificationManager initialisé avec succès');
         }
     }, []);
 

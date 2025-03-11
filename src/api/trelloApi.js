@@ -136,3 +136,29 @@ export async function getBoardMembers(boardId) {
         return [];
     }
 }
+
+export const inviteMember = async (boardId, email) => {
+    try {
+        const board = await checkPermissions(boardId);
+        if (!board) {
+            showNotification('Vous n\'avez pas les permissions nécessaires pour inviter des membres.', 'error');
+            return false;
+        }
+
+        await trelloApi.put(`boards/${boardId}/members`, null, {
+            params: {
+                email: email,
+            }
+        });
+
+        showNotification('Invitation envoyée avec succès !', 'success');
+        return true;
+    } catch (error) {
+        if (error.response?.status === 400) {
+            showNotification('Adresse email invalide ou déjà membre du tableau.', 'error');
+        } else {
+            handleApiError(error);
+        }
+        return false;
+    }
+};
