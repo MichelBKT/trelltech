@@ -126,3 +126,13 @@ export async function updateBoard(boardId, newName) {
         return null;
     }
 }
+
+export async function getBoardMembers(boardId) {
+    try {
+        const response = await trelloApi.get(`boards/${boardId}/members`);
+        return response.data || [];
+    } catch (error) {
+        handleApiError(error);
+        return [];
+    }
+}

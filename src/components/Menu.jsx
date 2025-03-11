@@ -8,11 +8,11 @@ import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
-import { getBoards, getLists, deleteBoard, updateBoard, createBoard } from "../api/trelloApi";
+import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMembers } from "../api/trelloApi";
 import WorkspaceItem from "./workspace/WorkspaceItem.jsx";
 import CreateWorkspaceModal from "./workspace/CreateWorkspaceModal.jsx";
 
-export default function Menu() {
+export default function Menu({ onWorkspaceSelect }) {
     const [darkMode, setDarkMode] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const [boards, setBoards] = useState([]);
@@ -20,6 +20,7 @@ export default function Menu() {
     const [lists, setLists] = useState([]);
     const [boardColors, setBoardColors] = useState({});
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [boardMembers, setBoardMembers] = useState([]);
 
     useEffect(() => {
         if (Cookies.get('dark') === 'true') {
@@ -30,16 +31,14 @@ export default function Menu() {
 
     useEffect(() => {
         const loadBoards = async () => {
-            console.log('Chargement des tableaux...');
             const boardsData = await getBoards();
-            console.log('Données des tableaux reçues:', boardsData);
             if (Array.isArray(boardsData)) {
                 setBoards(boardsData);
                 if (boardsData.length > 0) {
                     setSelectedBoard(boardsData[0]);
+                    onWorkspaceSelect(boardsData[0], getBoardColor(boardsData[0].id));
                 }
             } else {
-                console.error('Les données reçues ne sont pas un tableau:', boardsData);
                 setBoards([]);
             }
         };
@@ -103,6 +102,7 @@ export default function Menu() {
             setBoards(prevBoards => prevBoards.filter(board => board.id !== boardId));
             if (selectedBoard?.id === boardId) {
                 setSelectedBoard(null);
+                onWorkspaceSelect(null, null);
             }
         }
     };
@@ -115,6 +115,10 @@ export default function Menu() {
                     board.id === boardId ? { ...board, name: newName } : board
                 )
             );
+            if (selectedBoard?.id === boardId) {
+                setSelectedBoard(updatedBoard);
+                onWorkspaceSelect(updatedBoard, getBoardColor(boardId));
+            }
         }
     };
 
@@ -123,7 +127,15 @@ export default function Menu() {
         if (newBoard) {
             setBoards(prevBoards => [...prevBoards, newBoard]);
             setSelectedBoard(newBoard);
+            onWorkspaceSelect(newBoard, getBoardColor(newBoard.id));
         }
+    };
+
+    const handleWorkspaceClick = async (board) => {
+        setSelectedBoard(board);
+        onWorkspaceSelect(board, getBoardColor(board.id));
+        const members = await getBoardMembers(board.id);
+        setBoardMembers(members);
     };
 
     return (
@@ -149,7 +161,7 @@ export default function Menu() {
                     <div className="flex flex-row items-center">
                         <Suitcase />
                         <span className="pl-2">
-                            {`${isMenuOpen ? "Espaces    de travail" : ""}`}
+                            {`${isMenuOpen ? "Espaces de travail" : ""}`}
                         </span>
                     </div>
                     {isMenuOpen && (
@@ -165,22 +177,54 @@ export default function Menu() {
                 </div>
 
                 {boards.map((board) => (
-                    <WorkspaceItem
-                        key={board.id}
-                        board={board}
-                        isMenuOpen={isMenuOpen}
-                        color={getBoardColor(board.id)}
-                        onDelete={handleDeleteBoard}
-                        onEdit={handleEditBoard}
-                    />
+                    <div key={board.id} onClick={() => handleWorkspaceClick(board)}>
+                        <WorkspaceItem
+                            board={board}
+                            isMenuOpen={isMenuOpen}
+                            color={getBoardColor(board.id)}
+                            onDelete={handleDeleteBoard}
+                            onEdit={handleEditBoard}
+                        />
+                    </div>
                 ))}
 
-                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                    <Members/>
-                    <span className="pl-2">
-                        {`${isMenuOpen ? "Membres" : ""}`}
-                    </span>
-                </a>
+                <div className="p-4 pl-6 text-gray-900 font-bold flex flex-col focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                    <div className="flex flex-row items-center">
+                        <Members/>
+                        <span className="pl-2">
+                            {`${isMenuOpen ? "Membres" : ""}`}
+                        </span>
+                    </div>
+                    {isMenuOpen && boardMembers.length > 0 && (
+                        <div className="mt-2 pl-6">
+                            {boardMembers.map((member) => (
+                                <div key={member.id} className="flex items-center py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2">
+                                    {member.avatarUrl ? (
+                                        <img 
+                                            src={member.avatarUrl} 
+                                            alt={member.fullName}
+                                            className="w-8 h-8 rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                                            <span className="text-sm text-gray-600 dark:text-gray-300">
+                                                {member.fullName.charAt(0)}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className="ml-3">
+                                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            {member.fullName}
+                                        </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400 block">
+                                            {member.username}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 <a href="#" className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100`}>
                     <Person/>
