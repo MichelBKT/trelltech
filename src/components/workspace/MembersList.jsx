@@ -11,10 +11,10 @@ export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, o
     };
 
     return (
-        <div className="p-4 pl-6 text-gray-900 font-bold flex flex-col focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-            <div className="flex flex-row items-center justify-between">
+        <>
+            <div className="p-4 pb-2 pl-5 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
                 <div className="flex flex-row items-center">
-                    <Members/>
+                    <Members />
                     <span className="pl-2">
                         {`${isMenuOpen ? "Membres" : ""}`}
                     </span>
@@ -30,15 +30,20 @@ export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, o
                     </button>
                 )}
             </div>
-            {isMenuOpen && boardMembers.length > 0 && (
+
+            {isMenuOpen && selectedBoard && (
                 <div className="mt-2 pl-6">
                     {boardMembers.map((member) => (
                         <div key={member.id} className="flex items-center py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2">
-                            {member.avatarUrl ? (
-                                <img 
-                                    src={member.avatarUrl} 
+                            {member.avatarHash ? (
+                                <img
+                                    src={`https://trello-members.s3.amazonaws.com/${member.id}/${member.avatarHash}`}
                                     alt={member.fullName}
                                     className="w-8 h-8 rounded-full object-cover"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'block';
+                                    }}
                                 />
                             ) : (
                                 <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
@@ -59,11 +64,12 @@ export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, o
                     ))}
                 </div>
             )}
+
             <InviteMemberModal
                 isOpen={isInviteModalOpen}
                 onClose={() => setIsInviteModalOpen(false)}
                 onInvite={handleInvite}
             />
-        </div>
+        </>
     );
 } 
