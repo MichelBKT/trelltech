@@ -35,7 +35,7 @@ export default function App() {
                 <Menu className="z-50" onWorkspaceSelect={handleWorkspaceSelect} />
                 <div className="flex flex-col h-full">
                     <Navbar className="z-10" selectedWorkspace={selectedWorkspace} workspaceColor={workspaceColor} />
-                    <MainApp />
+                    <MainApp selectedWorkspace={selectedWorkspace} />
                 </div>
                 <NotificationManager ref={notificationManagerRef} />
             </div>

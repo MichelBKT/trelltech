@@ -161,7 +161,10 @@ export default function Menu({ onWorkspaceSelect }) {
                     {`${isMenuOpen ? "AGILIX" : ""}`}
                 </a>
 
-                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100" onClick={() => {
+                    setSelectedBoard(null);
+                    onWorkspaceSelect(null, null);
+                }}>
                     <Home/>
                     <span className="pl-2">
                         {`${isMenuOpen ? "Accueil" : ""}`}
