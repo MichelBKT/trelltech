@@ -12,7 +12,7 @@ export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, o
 
     return (
         <>
-            <div className="p-4 pb-2 pl-5 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+            <div className="p-4 pb-2 pl-6 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100">
                 <div className="flex flex-row items-center">
                     <Members />
                     <span className="pl-2">
