@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import BrandWhiteIcon from "../src/components/icons/BrandWhiteIcon";
+import BrandIcon from "../src/components/icons/BrandIcon";
 import ToggleOnDarkMode from "../src/components/icons/ToggleOnDarkMode.jsx";
 import ToggleOffDarkMode from "../src/components/icons/ToggleOffDarkMode.jsx";
 
@@ -21,12 +22,13 @@ export default function Login() {
 
 
     return (
-        <div className="w-full h-screen block items-center justify-center bg-white">
-            <div className="w-full flex space-x-0 items-center justify-between">
+        <div className="w-full h-screen block items-center justify-center bg-white dark:bg-purple-950">
+            <div className="w-full flex px-12 py-4 space-x-0 items-center justify-between">
 
-                <div className="">
-                    <BrandWhiteIcon className="w-16 h-16" />
-
+                <div className=" inline-flex font-extrabold text-4xl bg-gradient-to-b  dark:text-white from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    <BrandIcon />
+                    <BrandWhiteIcon />
+                    AGILIX
                 </div>
                 <div>
                     <button onClick={toggleDarkMode} className="">
@@ -35,25 +37,25 @@ export default function Login() {
                 </div>
 
             </div>
-            <div className="w-full left-[auto] top-[20%] absolute inline-flex flex-col justify-center items-center gap-4">
+            <div className="w-full mt-24  absolute inline-flex flex-col justify-center items-center gap-4">
                 <div className="w-full self-stretch inline-flex flex-col justify-start items-center gap-2">
-                    <h1 className="justify-center text-slate-800 text-3xl font-bold font-['Nunito'] leading-10"> Connexion </h1>
-                    <p className="opacity-60 text-center justify-start text-slate-800 text-base font-normal font-['Nunito'] leading-loose">Veuillez vous connecter pour continuer avec votre compte</p>
+                    <h1 className="justify-center text-slate-800 dark:text-white text-3xl font-bold font-['Nunito'] leading-10"> Connexion </h1>
+                    <p className="opacity-60 text-center justify-start text-slate-800 dark:text-white text-base font-normal font-['Nunito'] leading-loose">Veuillez vous connecter pour continuer avec votre compte</p>
                 </div>
                 <div>
                     <div className="relative my-4 w-xs">
-                        <label className="block justify-start text-slate-800 text-xs font-semibold font-['Nunito'] leading-snug" htmlFor="">Email</label>
-                        <input className="block w-full self-stretch text-slate-800 opacity-100 px-4 py-2.5 bg-purple-100 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="user@domaine.com" />
+                        <label className="block justify-start text-slate-800 dark:text-white text-sm font-semibold font-['Nunito'] leading-snug" htmlFor="">Email</label>
+                        <input className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="user@domaine.com" />
                     </div>
                     <div className="relative my-4 w-xs">
-                        <label className="block justify-start text-slate-800 text-xs font-semibold font-['Nunito'] leading-snug" htmlFor="">Mot de passe</label>
-                        <input className="block w-full self-stretch text-slate-800 opacity-100 px-4 py-2.5 bg-purple-100 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="****************" />
+                        <label className="block justify-start text-slate-800 text-sm font-semibold font-['Nunito'] leading-snug" htmlFor="">Mot de passe</label>
+                        <input className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="****************" />
                     </div>
 
                     <div className="relative my-4 w-xs">
                         <div className="inline-flex justify-start items-center gap-2.5">
                             <input type="checkbox" name="" id="" />
-                            <label htmlFor="Rester connecté" className="opacity-90 text-center justify-start text-slate-800 text-base font-normal font-['Nunito'] leading-snug">Rester connecté</label>
+                            <label htmlFor="Rester connecté" className="opacity-90 text-center justify-start text-slate-800 dark:text-white text-base font-normal font-['Nunito'] leading-snug">Rester connecté</label>
                         </div>
                     </div>
                     <div className="relative my-4 w-xs">
@@ -61,7 +63,7 @@ export default function Login() {
                     </div>
                 </div>
                 <div>
-                    <span>Mot de passe oubliée ?</span>
+                    <span className="block justify-start text-slate-800 dark:text-white text-sm font-semibold font-['Nunito'] leading-snug underline " >Mot de passe oubliée ?</span>
                 </div>
             </div>
 
