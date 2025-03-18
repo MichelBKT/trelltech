@@ -1,18 +1,22 @@
 import ToggleMenu from "./icons/ToggleMenu.jsx";
-import BrandWhiteIcon from "./icons/BrandWhiteIcon.jsx";
+import BrandIcon from "./icons/BrandIcon.jsx";
 import Home from "./icons/Home.jsx";
 import Suitcase from "./icons/Suitcase.jsx";
-import Members from "./icons/Members.jsx";
-import Person from "./icons/Person.jsx";
 import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
-import { getBoards, getLists, deleteBoard, updateBoard, createBoard } from "../api/trelloApi";
+import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMembers, inviteMember } from "../api/trelloApi";
 import WorkspaceItem from "./workspace/WorkspaceItem.jsx";
 import CreateWorkspaceModal from "./workspace/CreateWorkspaceModal.jsx";
+import MembersList from "./workspace/MembersList.jsx";
+import PropTypes from "prop-types";
+import BrandWhiteIcon from "./icons/BrandWhiteIcon.jsx";
 
-export default function Menu() {
+Menu.propTypes = {
+    onWorkspaceSelect: PropTypes.func.isRequired,
+}
+export default function Menu({ onWorkspaceSelect }) {
     const [darkMode, setDarkMode] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const [boards, setBoards] = useState([]);
@@ -20,6 +24,7 @@ export default function Menu() {
     const [lists, setLists] = useState([]);
     const [boardColors, setBoardColors] = useState({});
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [boardMembers, setBoardMembers] = useState([]);
 
     useEffect(() => {
         if (Cookies.get('dark') === 'true') {
@@ -30,16 +35,14 @@ export default function Menu() {
 
     useEffect(() => {
         const loadBoards = async () => {
-            console.log('Chargement des tableaux...');
             const boardsData = await getBoards();
-            console.log('Données des tableaux reçues:', boardsData);
             if (Array.isArray(boardsData)) {
                 setBoards(boardsData);
                 if (boardsData.length > 0) {
                     setSelectedBoard(boardsData[0]);
+                    onWorkspaceSelect(boardsData[0], getBoardColor(boardsData[0].id));
                 }
             } else {
-                console.error('Les données reçues ne sont pas un tableau:', boardsData);
                 setBoards([]);
             }
         };
@@ -103,6 +106,7 @@ export default function Menu() {
             setBoards(prevBoards => prevBoards.filter(board => board.id !== boardId));
             if (selectedBoard?.id === boardId) {
                 setSelectedBoard(null);
+                onWorkspaceSelect(null, null);
             }
         }
     };
@@ -115,6 +119,10 @@ export default function Menu() {
                     board.id === boardId ? { ...board, name: newName } : board
                 )
             );
+            if (selectedBoard?.id === boardId) {
+                setSelectedBoard(updatedBoard);
+                onWorkspaceSelect(updatedBoard, getBoardColor(boardId));
+            }
         }
     };
 
@@ -123,33 +131,55 @@ export default function Menu() {
         if (newBoard) {
             setBoards(prevBoards => [...prevBoards, newBoard]);
             setSelectedBoard(newBoard);
+            onWorkspaceSelect(newBoard, getBoardColor(newBoard.id));
+        }
+    };
+
+    const handleWorkspaceClick = async (board) => {
+        setSelectedBoard(board);
+        onWorkspaceSelect(board, getBoardColor(board.id));
+        const members = await getBoardMembers(board.id);
+        setBoardMembers(members);
+    };
+
+    const handleInviteMember = async (email) => {
+        if (selectedBoard) {
+            const success = await inviteMember(selectedBoard.id, email);
+            if (success) {
+                const updatedMembers = await getBoardMembers(selectedBoard.id);
+                setBoardMembers(updatedMembers);
+            }
         }
     };
 
     return (
         <div className={"fixed top-0 left-0 h-full w-64 z-50"}>
-            <aside className="flex flex-col w-20 duration-1000 h-screen py-2 space-y-2 bg-white dark:bg-gray-900 border-r-2 border-gray-200 dark:border-gray-800 z-50">
-                <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex text-gray-500 focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={() => {setIsMenuOpen(!isMenuOpen);}}>
+            <aside className="flex flex-col w-20 duration-1000 h-screen content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 border-gray-200 z-50">
+                <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={() => {setIsMenuOpen(!isMenuOpen);}}>
                     <ToggleMenu/>
                 </button>
 
-                <a href="#" className={`${isMenuOpen ? "font-extrabold text-4xl bg-gradient-to-b  from-blue-400 to-purple-500 bg-clip-text text-transparent" : "p-2 flex-row text-gray-500 focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8"} flex flex-row p-2`} >
+                <a href="#" className={`${isMenuOpen ? "font-extrabold text-4xl bg-gradient-to-b  dark:text-white from-blue-400 to-purple-500 bg-clip-text text-transparent" : "p-2 flex-row dark:text-white text-gray-500 focus:outline-none transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8"} flex flex-row p-2`} >
+                    <BrandIcon/>
                     <BrandWhiteIcon />
                     {`${isMenuOpen ? "AGILIX" : ""}`}
                 </a>
 
-                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100" onClick={() => {
+                    setSelectedBoard(null);
+                    onWorkspaceSelect(null, null);
+                }}>
                     <Home/>
                     <span className="pl-2">
                         {`${isMenuOpen ? "Accueil" : ""}`}
                     </span>
                 </a>
 
-                <div className="p-4 pb-2 pl-5 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                <div className="p-4 pl-6 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100">
                     <div className="flex flex-row items-center">
                         <Suitcase />
-                        <span className="pl-2">
-                            {`${isMenuOpen ? "Espaces    de travail" : ""}`}
+                        <span className="pl-2 flex">
+                            {`${isMenuOpen ? "Espaces de travail" : ""}`}
                         </span>
                     </div>
                     {isMenuOpen && (
@@ -165,31 +195,25 @@ export default function Menu() {
                 </div>
 
                 {boards.map((board) => (
-                    <WorkspaceItem
-                        key={board.id}
-                        board={board}
-                        isMenuOpen={isMenuOpen}
-                        color={getBoardColor(board.id)}
-                        onDelete={handleDeleteBoard}
-                        onEdit={handleEditBoard}
-                    />
+                    <div key={board.id} onClick={() => handleWorkspaceClick(board)}>
+                        <WorkspaceItem
+                            board={board}
+                            isMenuOpen={isMenuOpen}
+                            color={getBoardColor(board.id)}
+                            onDelete={handleDeleteBoard}
+                            onEdit={handleEditBoard}
+                        />
+                    </div>
                 ))}
 
-                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
-                    <Members/>
-                    <span className="pl-2">
-                        {`${isMenuOpen ? "Membres" : ""}`}
-                    </span>
-                </a>
+                <MembersList 
+                    isMenuOpen={isMenuOpen}
+                    selectedBoard={selectedBoard}
+                    boardMembers={boardMembers}
+                    onInviteMember={handleInviteMember}
+                />
 
-                <a href="#" className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100`}>
-                    <Person/>
-                    <span className={`${isMenuOpen ? "w-48 pl-2 flex flex-row justify-between" : "hidden"}`}>
-                        {`${isMenuOpen ? "Mon Profil" : ""}`}
-                    </span>
-                </a>
-
-                <button type="button" className={`${isMenuOpen ? "justify-evenly p-2" : "p-2"} flex flex-row-reverse items-center mt-auto cursor-pointer text-gray-900 font-bold focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"`} onClick={toggleDarkMode}>
+                <button type="button" className={`${isMenuOpen ? "justify-evenly p-2" : "p-2"} flex flex-row-reverse items-center mt-auto cursor-pointer text-gray-900 font-bold focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100"`} onClick={toggleDarkMode}>
                     {darkMode ? <ToggleOnDarkMode /> : <ToggleOffDarkMode/>}
                     {`${isMenuOpen ? "Thème" : ""}`}
                 </button>
