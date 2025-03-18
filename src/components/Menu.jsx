@@ -1,9 +1,7 @@
 import ToggleMenu from "./icons/ToggleMenu.jsx";
-import BrandWhiteIcon from "./icons/BrandWhiteIcon.jsx";
+import BrandIcon from "./icons/BrandIcon.jsx";
 import Home from "./icons/Home.jsx";
 import Suitcase from "./icons/Suitcase.jsx";
-import Members from "./icons/Members.jsx";
-import Person from "./icons/Person.jsx";
 import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
@@ -12,7 +10,12 @@ import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMem
 import WorkspaceItem from "./workspace/WorkspaceItem.jsx";
 import CreateWorkspaceModal from "./workspace/CreateWorkspaceModal.jsx";
 import MembersList from "./workspace/MembersList.jsx";
+import PropTypes from "prop-types";
+import BrandWhiteIcon from "./icons/BrandWhiteIcon.jsx";
 
+Menu.propTypes = {
+    onWorkspaceSelect: PropTypes.func.isRequired,
+}
 export default function Menu({ onWorkspaceSelect }) {
     const [darkMode, setDarkMode] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
