@@ -46,18 +46,18 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
                         </>
                     )}
                 </div>
-                <div className="w-full max-md:ml-2 flex items-center justify-end relative">
+                <div className="max-md:ml-2 flex items-center justify-center relative left-24 lg:left-64 xl:left-96">
                     {userData && <NotificationCenter userId={userData.id} />}
                 </div>
-                <div className="max-md:invisible max-md:w-0 w-72 flex p-2 text-black dark:text-gray-300 items-center justify-end">
-                    {greeting} {userData?.fullName || 'Utilisateur'}
+                <div className="max-md:invisible max-md:w-0 w-full flex p-2 text-black dark:text-white items-center justify-end">
+                    {greeting} {firstName || 'Utilisateur'}
                 </div>
-                <div className="p-2 px-6 text-black dark:text-gray-500 flex items-center text-xl">
-                    {userData?.avatarHash ? (
+                <div className="p-2 px-6 text-black dark:text-white flex items-center text-xl">
+                    {userData?.avatarHash ?(
                         <img 
                             src={getAvatarUrl()}
                             alt="Avatar" 
-                            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover transition-all duration-200"
+                            className="max-sm:w-12 w-36 object-fill rounded-full transition-all duration-200 relative md:right-6 md:left-0 left-24"
                             onError={(e) => {
                                 console.error('Erreur de chargement de l\'avatar');
                                 e.target.style.display = 'none';

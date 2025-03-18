@@ -172,7 +172,7 @@ export default function Menu({ onWorkspaceSelect }) {
                     </span>
                 </a>
 
-                <div className="p-4 pb-2 pl-5 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100">
+                <div className="p-4 pb-2 pl-6 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100">
                     <div className="flex flex-row items-center">
                         <Suitcase />
                         <span className="pl-2">
@@ -210,14 +210,7 @@ export default function Menu({ onWorkspaceSelect }) {
                     onInviteMember={handleInviteMember}
                 />
 
-                <a href="#" className={`${isMenuOpen ? "pl-12" : "pl-6"} pb-2 pt-2 text-gray-900  font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100`}>
-                    <Person/>
-                    <span className={`${isMenuOpen ? "w-48 pl-2 flex flex-row justify-between" : "hidden"}`}>
-                        {`${isMenuOpen ? "Mon Profil" : ""}`}
-                    </span>
-                </a>
-
-                <button type="button" className={`${isMenuOpen ? "justify-evenly p-2" : "p-2"} flex flex-row-reverse items-center mt-auto cursor-pointer text-gray-900 font-bold focus:outline-none transition-colors duration-1000 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 hover:bg-gray-100"`} onClick={toggleDarkMode}>
+                <button type="button" className={`${isMenuOpen ? "justify-evenly p-2" : "p-2"} flex flex-row-reverse items-center mt-auto cursor-pointer text-gray-900 font-bold focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100"`} onClick={toggleDarkMode}>
                     {darkMode ? <ToggleOnDarkMode /> : <ToggleOffDarkMode/>}
                     {`${isMenuOpen ? "Thème" : ""}`}
                 </button>
