@@ -1,4 +1,12 @@
 import { useState } from 'react';
+import PropTypes from "prop-types";
+
+DeleteConfirmationModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    workspaceName: PropTypes.string.isRequired,
+};
 
 export default function DeleteConfirmationModal({ isOpen, onClose, onConfirm, workspaceName }) {
     if (!isOpen) return null;

@@ -2,7 +2,16 @@ import { useState } from 'react';
 import Workspace from "../icons/Workspace.jsx";
 import WorkspaceContextMenu from "./WorkspaceContextMenu.jsx";
 import DeleteConfirmationModal, { EditWorkspaceModal } from "./WorkspaceModals.jsx";
+import PropTypes from "prop-types";
 
+WorkspaceItem.propTypes = {
+    board: PropTypes.object.isRequired,
+    isMenuOpen: PropTypes.bool.isRequired,
+    color: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired,
+
+}
 export default function WorkspaceItem({ board, isMenuOpen, color, onDelete, onEdit }) {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

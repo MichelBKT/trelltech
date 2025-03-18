@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import PropTypes from "prop-types";
+
+InviteMemberModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onInvite: PropTypes.func.isRequired,
+}
 
 export default function InviteMemberModal({ isOpen, onClose, onInvite }) {
     const [email, setEmail] = useState('');

@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import PropTypes from "prop-types";
+
+CreateWorkspaceModal.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onCreate: PropTypes.func.isRequired,
+};
 
 export default function CreateWorkspaceModal({ isOpen, onClose, onCreate }) {
     const [name, setName] = useState('');
