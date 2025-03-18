@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
 
+NotificationCenter.propTypes = {
+    userId: PropTypes.string.isRequired,
+}
 export default function NotificationCenter({ userId }) {
     const [notifications, setNotifications] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
