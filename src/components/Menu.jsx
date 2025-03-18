@@ -154,7 +154,7 @@ export default function Menu({ onWorkspaceSelect }) {
 
     return (
         <div className={"fixed top-0 left-0 h-full w-64 z-50"}>
-            <aside className="flex flex-col w-20 duration-1000 h-screen py-2 space-y-2  content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 z-50">
+            <aside className="flex flex-col w-20 duration-1000 h-screen content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 border-gray-200 z-50">
                 <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={() => {setIsMenuOpen(!isMenuOpen);}}>
                     <ToggleMenu/>
                 </button>
@@ -165,7 +165,7 @@ export default function Menu({ onWorkspaceSelect }) {
                     {`${isMenuOpen ? "AGILIX" : ""}`}
                 </a>
 
-                <a href="#" className="p-4 pb-2 pl-6  text-gray-900 font-bold flex flex-row content-center focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100" onClick={() => {
+                <a href="#" className="p-4 pl-6  text-gray-900 font-bold flex flex-row focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100" onClick={() => {
                     setSelectedBoard(null);
                     onWorkspaceSelect(null, null);
                 }}>
@@ -175,10 +175,10 @@ export default function Menu({ onWorkspaceSelect }) {
                     </span>
                 </a>
 
-                <div className="p-4 pb-2 pl-6 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100">
+                <div className="p-4 pl-6 text-gray-900 font-bold flex flex-row content-center justify-between focus:outline-none transition-colors duration-1000 rounded-lg dark:text-white dark:hover:bg-gray-800 hover:bg-gray-100">
                     <div className="flex flex-row items-center">
                         <Suitcase />
-                        <span className="pl-2">
+                        <span className="pl-2 flex">
                             {`${isMenuOpen ? "Espaces de travail" : ""}`}
                         </span>
                     </div>

@@ -35,7 +35,7 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
 
     return (
         <>
-            <div className="flex h-18 w-full bg-white dark:bg-purple-950 dark:text-white duration-1000 content-center border-b-2 border-gray-200 dark:border-violet-950 z-10 gap-4">
+            <div className="flex h-18 w-full  border-b-2 border-gray-200 dark:border-violet-900 bg-white dark:bg-purple-950 dark:text-white duration-1000 content-center z-10 gap-4">
                 <div className="w-full max-md:w-0 md:ml-32 lg:justify-center justify-end flex relative items-center font-bold text-black dark:text-gray-300 min-sm:text-xs lg:text-xl gap-0 md:gap-4">
                     {selectedWorkspace && (
                         <>
