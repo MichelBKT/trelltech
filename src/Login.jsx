@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
 import Cookies from "js-cookie";
 import BrandWhiteIcon from "../src/components/icons/BrandWhiteIcon";
 import BrandIcon from "../src/components/icons/BrandIcon";
 import ToggleOnDarkMode from "../src/components/icons/ToggleOnDarkMode.jsx";
 import ToggleOffDarkMode from "../src/components/icons/ToggleOffDarkMode.jsx";
+import { Eye, EyeOff } from "lucide-react"; // Icônes pour afficher/cacher
 
 export default function Login() {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode,] = useState(false);
 
     const toggleDarkMode = () => {
         const newDarkMode = !darkMode;
@@ -19,6 +20,11 @@ export default function Login() {
             Cookies.set('dark', 'false', { expires: 365 });
         }
     };
+
+    const [showPassword, setShowPassword] = useState(false);
+
+
+
 
 
     return (
@@ -45,11 +51,28 @@ export default function Login() {
                 <div>
                     <div className="relative my-4 w-xs">
                         <label className="block justify-start text-slate-800 dark:text-white text-sm font-semibold font-['Nunito'] leading-snug" htmlFor="">Email</label>
-                        <input className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="user@domaine.com" />
+                        <input className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] justify-start items-center gap-2.5" type="email" placeholder="user@domaine.com" />
                     </div>
                     <div className="relative my-4 w-xs">
-                        <label className="block justify-start text-slate-800 text-sm font-semibold font-['Nunito'] leading-snug" htmlFor="">Mot de passe</label>
-                        <input className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] inline-flex justify-start items-center gap-2.5" type="email" placeholder="****************" />
+                        <label className="block justify-start text-slate-800   dark:text-white text-sm font-semibold font-['Nunito'] leading-snug" htmlFor="">Mot de passe</label>
+
+
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="****************"
+                                className="block w-full self-stretch text-slate-800 dark:text-white opacity-100 px-4 py-2.5 bg-purple-100 dark:bg-black/40 rounded-[10px] justify-start items-center gap-2.5"
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-3 flex items-center text-gray-600 hover:text-gray-900"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
+
+
                     </div>
 
                     <div className="relative my-4 w-xs">
@@ -59,7 +82,8 @@ export default function Login() {
                         </div>
                     </div>
                     <div className="relative my-4 w-xs">
-                        <button className="w-full self-stretch h-10 p-3 bg-purple-600 rounded-[400px] inline-flex justify-center items-center gap-2.5 text-white"> Connexion </button>
+                        <button className=" btn w-full relative overflow-hidden h-10 p-3 bg-purple-600 rounded-[400px] inline-flex justify-center items-center gap-2.5 text-white cursor-pointer hover:bg-purple-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg  "> Connexion </button>
+
                     </div>
                 </div>
                 <div>
