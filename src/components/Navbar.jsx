@@ -2,10 +2,18 @@ import Workspace from "./icons/Workspace.jsx";
 import Person from "./icons/Person.jsx";
 import { useEffect, useState } from "react";
 import NotificationCenter from "./notifications/NotificationCenter.jsx";
+import PropTypes from "prop-types";
+import useFetchUserData from "../hooks/useFetchUserData.jsx";
+
+Navbar.propTypes = {
+    selectedWorkspace: PropTypes.object,
+    workspaceColor: PropTypes.string,
+}
 
 export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const [greeting, setGreeting] = useState("Bonjour");
-    const [userData, setUserData] = useState(null);
+
+    const userData = useFetchUserData();
 
     useEffect(() => {
         const currentHour = new Date().getHours();
@@ -16,28 +24,18 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
         }
     }, []);
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch(`https://api.trello.com/1/members/me?key=${import.meta.env.VITE_TRELLO_API_KEY}&token=${import.meta.env.VITE_TRELLO_API_TOKEN}`);
-                const data = await response.json();
-                setUserData(data);
-            } catch (error) {
-                console.error('Erreur lors de la récupération des données utilisateur:', error);
-            }
-        };
 
-        fetchUserData();
-    }, []);
 
     const getAvatarUrl = () => {
         if (!userData?.avatarHash) return null;
         return `https://trello-members.s3.amazonaws.com/${userData.id}/${userData.avatarHash}/170.png`;
     };
 
+    const firstName = userData?.fullName?.split(' ')[0];
+
     return (
         <>
-            <div className="flex h-18 w-full bg-white dark:bg-gray-900 duration-1000 content-center border-b-2 border-gray-200 dark:border-gray-700 z-10 gap-4">
+            <div className="flex h-18 w-full bg-white dark:bg-purple-950 dark:text-white duration-1000 content-center border-b-2 border-gray-200 dark:border-violet-950 z-10 gap-4">
                 <div className="w-full max-md:w-0 md:ml-32 lg:justify-center justify-end flex relative items-center font-bold text-black dark:text-gray-300 min-sm:text-xs lg:text-xl gap-0 md:gap-4">
                     {selectedWorkspace && (
                         <>
@@ -46,18 +44,18 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
                         </>
                     )}
                 </div>
-                <div className="w-full max-md:ml-2 flex items-center justify-end relative">
+                <div className="max-md:ml-2 flex items-center justify-center relative left-24 lg:left-64 xl:left-96">
                     {userData && <NotificationCenter userId={userData.id} />}
                 </div>
-                <div className="max-md:invisible max-md:w-0 w-72 flex p-2 text-black dark:text-gray-300 items-center justify-end">
-                    {greeting} {userData?.fullName || 'Utilisateur'}
+                <div className="max-md:invisible max-md:w-0 w-full flex p-2 text-black dark:text-white items-center justify-end">
+                    {greeting} {firstName || 'Utilisateur'}
                 </div>
-                <div className="p-2 px-6 text-black dark:text-gray-500 flex items-center text-xl">
-                    {userData?.avatarHash ? (
+                <div className="p-2 px-6 text-black dark:text-white flex items-center text-xl">
+                    {userData?.avatarHash ?(
                         <img 
                             src={getAvatarUrl()}
                             alt="Avatar" 
-                            className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover transition-all duration-200"
+                            className="max-sm:w-12 w-36 object-fill rounded-full transition-all duration-200 relative md:right-6 md:left-0 left-24"
                             onError={(e) => {
                                 console.error('Erreur de chargement de l\'avatar');
                                 e.target.style.display = 'none';
