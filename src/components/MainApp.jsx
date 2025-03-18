@@ -1,5 +1,5 @@
-import WelcomeScreen from './WelcomeScreen';
 import PropTypes from 'prop-types';
+import AppWelcome from "./AppWelcome.jsx";
 
 MainApp.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -11,7 +11,7 @@ export default function MainApp({ selectedWorkspace }) {
             {selectedWorkspace ? (
                 <img src={"/images/bg-winter.png"} alt={"bg-winter"} className="object-cover w-full h-full"/>
             ) : (
-                <WelcomeScreen />
+                <AppWelcome/>
             )}
         </div>
     );

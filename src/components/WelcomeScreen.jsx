@@ -1,20 +1,34 @@
+import Menu from "./Menu.jsx";
+import Navbar from "./Navbar.jsx";
+import MainApp from "./MainApp.jsx";
+import NotificationManager, {setNotificationManager} from "./notifications/NotificationManager.jsx";
+import {useEffect, useRef, useState} from "react";
+
+
 export default function WelcomeScreen() {
+    const notificationManagerRef = useRef(null);
+    const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+    const [workspaceColor, setWorkspaceColor] = useState(null);
+
+    useEffect(() => {
+        if (notificationManagerRef.current) {
+            setNotificationManager(notificationManagerRef.current);
+        }
+    }, []);
+
+    const handleWorkspaceSelect = (workspace, color) => {
+        setSelectedWorkspace(workspace);
+        setWorkspaceColor(color);
+    };
     return (
-        <div className="flex flex-col items-center justify-center h-full">
-            <div className="text-center space-y-4">
-                <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
-                    Bienvenue sur Agilix
-                </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                    Sélectionnez un workspace dans le menu de gauche pour commencer à travailler, 
-                    ou créez-en un nouveau en cliquant sur le bouton "+" dans la section "Espaces de travail".
-                </p>
-                <div className="mt-8">
-                    <svg className="w-32 h-32 mx-auto text-gray-400 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                </div>
+        <div className="relative h-screen">
+            <Menu className="z-50" onWorkspaceSelect={handleWorkspaceSelect} />
+            <div className="flex flex-col h-full">
+                <Navbar className="z-10" selectedWorkspace={selectedWorkspace} workspaceColor={workspaceColor} />
+                <MainApp selectedWorkspace={selectedWorkspace} />
             </div>
+            <NotificationManager ref={notificationManagerRef} />
         </div>
+
     );
 } 

@@ -1,10 +1,7 @@
 import './App.css';
-import Menu from "./components/Menu.jsx";
-import Navbar from "./components/Navbar.jsx";
-import MainApp from "./components/MainApp.jsx";
-import { useEffect, useRef, useState } from 'react';
-import { setNotificationManager } from './components/notifications/NotificationManager';
-import NotificationManager from './components/notifications/NotificationManager';
+import {BrowserRouter, Route, Routes} from "react-router";
+import Login from "./Login.jsx";
+import WelcomeScreen from "./components/WelcomeScreen.jsx";
 
 //
 // const env = {
@@ -14,32 +11,16 @@ import NotificationManager from './components/notifications/NotificationManager'
 // };
 
 export default function App() {
-    const notificationManagerRef = useRef(null);
-    const [selectedWorkspace, setSelectedWorkspace] = useState(null);
-    const [workspaceColor, setWorkspaceColor] = useState(null);
 
-    useEffect(() => {
-        if (notificationManagerRef.current) {
-            setNotificationManager(notificationManagerRef.current);
-        }
-    }, []);
-
-    const handleWorkspaceSelect = (workspace, color) => {
-        setSelectedWorkspace(workspace);
-        setWorkspaceColor(color);
-    };
 
     return (
-        <>
-            <div className="relative h-screen">
-                <Menu className="z-50" onWorkspaceSelect={handleWorkspaceSelect} />
-                <div className="flex flex-col h-full">
-                    <Navbar className="z-10" selectedWorkspace={selectedWorkspace} workspaceColor={workspaceColor} />
-                    <MainApp selectedWorkspace={selectedWorkspace} />
-                </div>
-                <NotificationManager ref={notificationManagerRef} />
-            </div>
-        </>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login/>} />
+                <Route path="/" element={<Login/>} />
+                <Route path="/home" element={<WelcomeScreen />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

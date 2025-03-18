@@ -4,8 +4,6 @@ import BrandWhiteIcon from "../src/components/icons/BrandWhiteIcon";
 import ToggleOnDarkMode from "../src/components/icons/ToggleOnDarkMode.jsx";
 import ToggleOffDarkMode from "../src/components/icons/ToggleOffDarkMode.jsx";
 
-
-
 export default function Login() {
     const [darkMode, setDarkMode] = useState(false);
 
