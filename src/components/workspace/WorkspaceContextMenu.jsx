@@ -1,6 +1,12 @@
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import PropTypes from "prop-types";
 
-export default function WorkspaceContextMenu({ isOpen, onClose, onDelete, onEdit }) {
+WorkspaceContextMenu.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    onEdit: PropTypes.func.isRequired,
+}
+export default function WorkspaceContextMenu({ isOpen, onDelete, onEdit }) {
     if (!isOpen) return null;
 
     return (

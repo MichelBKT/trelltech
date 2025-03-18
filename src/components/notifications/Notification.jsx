@@ -1,6 +1,18 @@
 import { useEffect } from 'react';
+import PropTypes from "prop-types";
 
-export default function Notification({ message, type = 'error', onClose, duration = 5000 }) {
+Notification.proptypes = {
+    message: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['success', 'error']),
+    onClose: PropTypes.func.isRequired,
+    duration: PropTypes.number,
+}
+Notification.defaultProps = {
+    type: 'error',
+    duration: 5000,
+};
+
+export default function Notification({ message, type, onClose, duration }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             onClose();

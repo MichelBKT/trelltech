@@ -1,8 +1,9 @@
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import Notification from './Notification';
 
-const NotificationManager = forwardRef((props, ref) => {
-    const [notifications, setNotifications] = useState([]);
+
+const NotificationManager = forwardRef(function NotificationManager(props, ref) {
+const [notifications, setNotifications] = useState([]);
 
     const addNotification = (message, type = 'error') => {
         const id = Date.now();
