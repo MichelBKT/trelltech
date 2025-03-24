@@ -5,6 +5,8 @@ import NotificationCenter from "./notifications/NotificationCenter.jsx";
 import PropTypes from "prop-types";
 import useFetchUserData from "../hooks/useFetchUserData.jsx";
 import Menu from "./Menu.jsx";
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 Navbar.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -13,7 +15,7 @@ Navbar.propTypes = {
 
 export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const [greeting, setGreeting] = useState("Bonjour");
-
+    const navigate = useNavigate();
     const userData = useFetchUserData();
 
     useEffect(() => {
@@ -25,7 +27,10 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
         }
     }, []);
 
-
+    const handleLogout = () => {
+        Cookies.remove('trello_token');
+        navigate('/login');
+    };
 
     const getAvatarUrl = () => {
         if (!userData?.avatarHash) return null;
@@ -48,8 +53,14 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
                 <div className="w-20 flex items-center relative left-12 lg:left-120 xl:left-250">
                     {userData && <NotificationCenter userId={userData.id} />}
                 </div>
-                <div className="max-md:invisible max-md:w-0 w-full flex p-2 text-black dark:text-white items-center justify-end">
-                    {greeting} {firstName || 'Utilisateur'}
+                <div className="max-md:invisible max-md:w-0 w-full flex p-2 text-black dark:text-white items-center justify-end gap-4">
+                    <span>{greeting} {firstName || 'Utilisateur'}</span>
+                    <button 
+                        onClick={handleLogout}
+                        className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+                    >
+                        Déconnexion
+                    </button>
                 </div>
                 <div className="p-2 px-6 text-black dark:text-white flex items-center text-xl">
                     {userData?.avatarHash ?(

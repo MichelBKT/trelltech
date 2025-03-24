@@ -1,0 +1,72 @@
+import { useState, useEffect } from "react";
+import Navbar from "./components/Navbar.jsx";
+import Menu from "./components/Menu.jsx";
+import { getBoards } from "./api/trelloApi.js";
+import PropTypes from "prop-types";
+
+export default function Home() {
+    const [boards, setBoards] = useState([]);
+    const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+    const [workspaceColor, setWorkspaceColor] = useState(null);
+
+    useEffect(() => {
+        const fetchBoards = async () => {
+            const fetchedBoards = await getBoards();
+            setBoards(fetchedBoards);
+            if (fetchedBoards.length > 0) {
+                setSelectedWorkspace(fetchedBoards[0]);
+                setWorkspaceColor(fetchedBoards[0].prefs?.backgroundColor || "#ECB500");
+            }
+        };
+        fetchBoards();
+    }, []);
+
+    const handleWorkspaceSelect = (board) => {
+        setSelectedWorkspace(board);
+        setWorkspaceColor(board.prefs?.backgroundColor || "#ECB500");
+    };
+
+    return (
+        <div className="flex h-screen bg-white dark:bg-purple-950">
+            <Menu 
+                boards={boards} 
+                selectedWorkspace={selectedWorkspace} 
+                onWorkspaceSelect={handleWorkspaceSelect}
+            />
+            <div className="flex-1 flex flex-col">
+                <Navbar 
+                    selectedWorkspace={selectedWorkspace} 
+                    workspaceColor={workspaceColor}
+                />
+                <div className="flex-1 p-6">
+                    {selectedWorkspace ? (
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                                {selectedWorkspace.name}
+                            </h1>
+                            {/* Contenu du workspace sélectionné */}
+                        </div>
+                    ) : (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-gray-500 dark:text-gray-400">
+                                Sélectionnez un workspace pour commencer
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+Home.propTypes = {
+    boards: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        prefs: PropTypes.shape({
+            backgroundColor: PropTypes.string
+        })
+    })),
+    selectedWorkspace: PropTypes.object,
+    workspaceColor: PropTypes.string
+}; 
