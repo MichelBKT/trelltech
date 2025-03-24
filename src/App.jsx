@@ -2,6 +2,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router";
 import Login from "./Login.jsx";
 import WelcomeScreen from "./components/WelcomeScreen.jsx";
+import Callback from "./Callback.jsx";
 
 //
 // const env = {
@@ -19,6 +20,7 @@ export default function App() {
                 <Route path="/login" element={<Login/>} />
                 <Route path="/" element={<Login/>} />
                 <Route path="/home" element={<WelcomeScreen />} />
+                <Route path="/callback" element={<Callback />} />
             </Routes>
         </BrowserRouter>
     );

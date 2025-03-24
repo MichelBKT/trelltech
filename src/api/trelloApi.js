@@ -1,16 +1,24 @@
 import axios from 'axios';
 import { showNotification } from '../components/notifications/NotificationManager';
+import Cookies from 'js-cookie';
 
 const API_KEY = import.meta.env.VITE_TRELLO_API_KEY;
-const API_TOKEN = import.meta.env.VITE_TRELLO_API_TOKEN;
 const API_URL = 'https://api.trello.com/1';
 
 export const trelloApi = axios.create({
     baseURL: API_URL,
     params: {
         key: API_KEY,
-        token: API_TOKEN,
     }
+});
+
+// Intercepteur pour ajouter le token à chaque requête
+trelloApi.interceptors.request.use((config) => {
+    const token = Cookies.get('trello_token');
+    if (token) {
+        config.params.token = token;
+    }
+    return config;
 });
 
 async function checkPermissions(boardId) {
