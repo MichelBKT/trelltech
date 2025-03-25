@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Cookies from "js-cookie";
 import BrandWhiteIcon from "../src/components/icons/BrandWhiteIcon";
 import BrandIcon from "../src/components/icons/BrandIcon";

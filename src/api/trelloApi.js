@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { showNotification } from '../components/notifications/NotificationManager';
 import Cookies from 'js-cookie';
+import {env} from "process";
 
 const API_KEY = import.meta.env.VITE_TRELLO_API_KEY;
 const API_URL = 'https://api.trello.com/1';
@@ -26,7 +27,7 @@ async function checkPermissions(boardId) {
         const response = await trelloApi.get(`boards/${boardId}`);
         return response.data;
     } catch (error) {
-        return null;
+        return handleApiError(error);
     }
 }
 
@@ -46,7 +47,7 @@ export async function createBoard(name) {
         showNotification('Workspace créé avec succès !', 'success');
         return response.data;
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return null;
     }
 }
@@ -56,7 +57,7 @@ export async function getBoards() {
         const response = await trelloApi.get('members/me/boards');
         return response.data || [];
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return [];
     }
 }
@@ -66,42 +67,124 @@ export async function getLists(boardId) {
         const response = await trelloApi.get(`boards/${boardId}/lists`);
         return response.data || [];
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return [];
     }
 }
 
-export async function getCards(listId) {
+// api/trelloApi.js
+// Ajouter ces fonctions si elles n'existent pas déjà
+
+export const getCards = async (listId) => {
     try {
-        const response = await trelloApi.get(`lists/${listId}/cards`);
-        return response.data || [];
+        const response = await fetch(
+            `${env.apiUrl}/lists/${listId}/cards?key=${env.apiKey}&token=${env.apiToken}`
+        );
+        return await response.json();
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error)
         return [];
     }
-}
+};
 
-export async function addList(boardId, listName) {
+export const createList = async (listData) => {
     try {
-        const response = await trelloApi.post('lists', { name: listName, idBoard: boardId });
-        showNotification('Liste créée avec succès !', 'success');
-        return response.data;
+        const response = await fetch(
+            `${env.apiUrl}/lists?key=${env.apiKey}&token=${env.apiToken}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(listData),
+            }
+        );
+        return await response.json();
     } catch (error) {
-        handleApiError(error);
-        return null;
+        await handleApiError(error);
     }
-}
+};
 
-export async function addCard(listId, cardName) {
+export const updateList = async (listId, listData) => {
     try {
-        const response = await trelloApi.post('cards', { name: cardName, idList: listId });
-        showNotification('Carte créée avec succès !', 'success');
-        return response.data;
+        const response = await fetch(
+            `${env.apiUrl}/lists/${listId}?key=${env.apiKey}&token=${env.apiToken}`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(listData),
+            }
+        );
+        return await response.json();
     } catch (error) {
-        handleApiError(error);
-        return null;
+        await handleApiError(error);
     }
-}
+};
+
+export const deleteList = async (listId) => {
+    try {
+        const response = await fetch(
+            `${env.apiUrl}/lists/${listId}/closed?key=${env.apiKey}&token=${env.apiToken}&value=true`,
+            {
+                method: "PUT",
+            }
+        );
+        return await response.json();
+    } catch (error) {
+        console.error("Error deleting list:", error);
+        throw error;
+    }
+};
+
+export const createCard = async (cardData) => {
+    try {
+        const response = await fetch(
+            `${env.apiUrl}/cards?key=${env.apiKey}&token=${env.apiToken}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(cardData),
+            }
+        );
+        return await response.json();
+    } catch (error) {
+        console.error("Error creating card:", error);
+        throw error;
+    }
+};
+
+export const updateCard = async (cardId, cardData) => {
+    try {
+        const response = await fetch(
+            `${env.apiUrl}/cards/${cardId}?key=${env.apiKey}&token=${env.apiToken}`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(cardData),
+            }
+        );
+        return await response.json();
+    } catch (error) {
+        console.error("Error updating card:", error);
+        throw error;
+    }
+};
+
+export const deleteCard = async (cardId) => {
+    try {
+        const response = await fetch(
+            `${env.apiUrl}/cards/${cardId}?key=${env.apiKey}&token=${env.apiToken}`,
+            {
+                method: "DELETE",
+            }
+        );
+        return await response.json();
+    } catch (error) {
+        console.error("Error deleting card:", error);
+        throw error;
+    }
+};
+
+
+
 
 export async function deleteBoard(boardId) {
     try {
@@ -114,7 +197,7 @@ export async function deleteBoard(boardId) {
         showNotification('Workspace supprimé avec succès !', 'success');
         return true;
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return false;
     }
 }
@@ -130,7 +213,7 @@ export async function updateBoard(boardId, newName) {
         showNotification('Workspace mis à jour avec succès !', 'success');
         return response.data;
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return null;
     }
 }
@@ -140,7 +223,7 @@ export async function getBoardMembers(boardId) {
         const response = await trelloApi.get(`boards/${boardId}/members`);
         return response.data || [];
     } catch (error) {
-        handleApiError(error);
+        await handleApiError(error);
         return [];
     }
 }
@@ -165,7 +248,7 @@ export const inviteMember = async (boardId, email) => {
         if (error.response?.status === 400) {
             showNotification('Adresse email invalide ou déjà membre du tableau.', 'error');
         } else {
-            handleApiError(error);
+            await handleApiError(error);
         }
         return false;
     }
