@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar.jsx";
 import Menu from "./components/Menu.jsx";
 import { getBoards } from "./api/trelloApi.js";
 import PropTypes from "prop-types";
+import AppWelcome from "./components/AppWelcome.jsx";
 
 export default function Home() {
     const [boards, setBoards] = useState([]);
@@ -13,10 +14,6 @@ export default function Home() {
         const fetchBoards = async () => {
             const fetchedBoards = await getBoards();
             setBoards(fetchedBoards);
-            if (fetchedBoards.length > 0) {
-                setSelectedWorkspace(fetchedBoards[0]);
-                setWorkspaceColor(fetchedBoards[0].prefs?.backgroundColor || "#ECB500");
-            }
         };
         fetchBoards();
     }, []);
@@ -47,11 +44,7 @@ export default function Home() {
                             {/* Contenu du workspace sélectionné */}
                         </div>
                     ) : (
-                        <div className="flex items-center justify-center h-full">
-                            <p className="text-gray-500 dark:text-gray-400">
-                                Sélectionnez un workspace pour commencer
-                            </p>
-                        </div>
+                        <AppWelcome />
                     )}
                 </div>
             </div>

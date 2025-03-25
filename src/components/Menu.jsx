@@ -38,10 +38,6 @@ export default function Menu({ onWorkspaceSelect }) {
             const boardsData = await getBoards();
             if (Array.isArray(boardsData)) {
                 setBoards(boardsData);
-                if (boardsData.length > 0) {
-                    setSelectedBoard(boardsData[0]);
-                    onWorkspaceSelect(boardsData[0], getBoardColor(boardsData[0].id));
-                }
             } else {
                 setBoards([]);
             }
