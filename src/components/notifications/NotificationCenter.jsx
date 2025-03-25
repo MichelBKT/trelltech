@@ -4,9 +4,19 @@ import PropTypes from "prop-types";
 NotificationCenter.propTypes = {
     userId: PropTypes.string.isRequired,
 }
+
 export default function NotificationCenter({ userId }) {
     const [notifications, setNotifications] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [readNotifications, setReadNotifications] = useState(new Set());
+
+    useEffect(() => {
+        // Charger les notifications lues depuis le localStorage
+        const savedReadNotifications = localStorage.getItem(`readNotifications_${userId}`);
+        if (savedReadNotifications) {
+            setReadNotifications(new Set(JSON.parse(savedReadNotifications)));
+        }
+    }, [userId]);
 
     useEffect(() => {
         if (userId) {
@@ -21,8 +31,54 @@ export default function NotificationCenter({ userId }) {
             );
             const data = await response.json();
             setNotifications(data);
+            
+            // Mettre à jour les notifications lues en fonction de l'état "unread" de l'API
+            const unreadNotifications = data.filter(n => n.unread).map(n => n.id);
+            setReadNotifications(prev => {
+                const newSet = new Set(prev);
+                unreadNotifications.forEach(id => newSet.delete(id));
+                return newSet;
+            });
         } catch (error) {
             console.error('Erreur lors de la récupération des notifications:', error);
+        }
+    };
+
+    const markAsRead = async (notificationId) => {
+        try {
+            await fetch(
+                `https://api.trello.com/1/notifications/${notificationId}/unread?key=${import.meta.env.VITE_TRELLO_API_KEY}&token=${import.meta.env.VITE_TRELLO_API_TOKEN}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ value: false })
+                }
+            );
+            setReadNotifications(prev => {
+                const newSet = new Set([...prev, notificationId]);
+                // Sauvegarder dans le localStorage
+                localStorage.setItem(`readNotifications_${userId}`, JSON.stringify([...newSet]));
+                return newSet;
+            });
+        } catch (error) {
+            console.error('Erreur lors du marquage de la notification comme lue:', error);
+        }
+    };
+
+    const markAllAsRead = async () => {
+        try {
+            await Promise.all(
+                notifications
+                    .filter(notification => !readNotifications.has(notification.id))
+                    .map(notification => markAsRead(notification.id))
+            );
+            const newSet = new Set(notifications.map(n => n.id));
+            setReadNotifications(newSet);
+            localStorage.setItem(`readNotifications_${userId}`, JSON.stringify([...newSet]));
+        } catch (error) {
+            console.error('Erreur lors du marquage de toutes les notifications comme lues:', error);
         }
     };
 
@@ -97,9 +153,9 @@ export default function NotificationCenter({ userId }) {
                 <svg className="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                {notifications.length > 0 && (
+                {notifications.filter(n => !readNotifications.has(n.id)).length > 0 && (
                     <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        {notifications.length}
+                        {notifications.filter(n => !readNotifications.has(n.id)).length}
                     </span>
                 )}
             </button>
@@ -108,14 +164,22 @@ export default function NotificationCenter({ userId }) {
                 <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                     <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">Notifications</h3>
-                        <button 
-                            onClick={() => setIsOpen(false)}
-                            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button 
+                                onClick={markAllAsRead}
+                                className="text-sm text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                                Tout marquer comme lu
+                            </button>
+                            <button 
+                                onClick={() => setIsOpen(false)}
+                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     {notifications.length === 0 ? (
                         <div className="p-4 text-center text-gray-500">
@@ -124,7 +188,11 @@ export default function NotificationCenter({ userId }) {
                     ) : (
                         <div className="divide-y divide-gray-200 dark:divide-gray-700">
                             {notifications.map((notification) => (
-                                <div key={notification.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <div 
+                                    key={notification.id} 
+                                    className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700 ${!readNotifications.has(notification.id) ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
+                                    onClick={() => markAsRead(notification.id)}
+                                >
                                     <div className="flex items-start space-x-3">
                                         <div className="flex-shrink-0">
                                             {getNotificationIcon(notification.type)}
