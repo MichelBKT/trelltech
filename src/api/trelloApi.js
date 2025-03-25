@@ -145,6 +145,22 @@ export async function getBoardMembers(boardId) {
     }
 }
 
+export async function removeMember(boardId, memberId) {
+    try {
+        const board = await checkPermissions(boardId);
+        if (!board) {
+            showNotification('Vous n\'avez pas les permissions nécessaires pour supprimer ce membre.', 'error');
+            return false;
+        }
+        await trelloApi.delete(`boards/${boardId}/members/${memberId}`);
+        showNotification('Membre supprimé avec succès !', 'success');
+        return true;
+    } catch (error) {
+        handleApiError(error);
+        return false;
+    }
+}
+
 export const inviteMember = async (boardId, email) => {
     try {
         const board = await checkPermissions(boardId);

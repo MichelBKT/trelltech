@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 
 NotificationCenter.propTypes = {
@@ -9,6 +9,7 @@ export default function NotificationCenter({ userId }) {
     const [notifications, setNotifications] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [readNotifications, setReadNotifications] = useState(new Set());
+    const notificationPanelRef = useRef(null);
 
     useEffect(() => {
         // Charger les notifications lues depuis le localStorage
@@ -23,6 +24,22 @@ export default function NotificationCenter({ userId }) {
             fetchNotifications(userId);
         }
     }, [userId]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (notificationPanelRef.current && !notificationPanelRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     const fetchNotifications = async (userId) => {
         try {
@@ -161,7 +178,7 @@ export default function NotificationCenter({ userId }) {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
+                <div ref={notificationPanelRef} className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-96 overflow-y-auto">
                     <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">Notifications</h3>
                         <div className="flex items-center gap-2">

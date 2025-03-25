@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Workspace from "../icons/Workspace.jsx";
 import WorkspaceContextMenu from "./WorkspaceContextMenu.jsx";
 import DeleteConfirmationModal, { EditWorkspaceModal } from "./WorkspaceModals.jsx";
+import WorkspaceMembersModal from "./WorkspaceMembersModal.jsx";
 import PropTypes from "prop-types";
 
 WorkspaceItem.propTypes = {
@@ -10,12 +11,30 @@ WorkspaceItem.propTypes = {
     color: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
-
 }
+
 export default function WorkspaceItem({ board, isMenuOpen, color, onDelete, onEdit }) {
     const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+    const contextMenuRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
+                setIsContextMenuOpen(false);
+            }
+        };
+
+        if (isContextMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isContextMenuOpen]);
 
     const handleDelete = () => {
         setIsContextMenuOpen(false);
@@ -25,6 +44,11 @@ export default function WorkspaceItem({ board, isMenuOpen, color, onDelete, onEd
     const handleEdit = () => {
         setIsContextMenuOpen(false);
         setIsEditModalOpen(true);
+    };
+
+    const handleManageMembers = () => {
+        setIsContextMenuOpen(false);
+        setIsMembersModalOpen(true);
     };
 
     const confirmDelete = () => {
@@ -59,12 +83,14 @@ export default function WorkspaceItem({ board, isMenuOpen, color, onDelete, onEd
                 )}
             </a>
 
-            <WorkspaceContextMenu
-                isOpen={isContextMenuOpen}
-                onClose={() => setIsContextMenuOpen(false)}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-            />
+            <div ref={contextMenuRef}>
+                <WorkspaceContextMenu
+                    isOpen={isContextMenuOpen}
+                    onDelete={handleDelete}
+                    onEdit={handleEdit}
+                    onManageMembers={handleManageMembers}
+                />
+            </div>
 
             <DeleteConfirmationModal
                 isOpen={isDeleteModalOpen}
@@ -78,6 +104,13 @@ export default function WorkspaceItem({ board, isMenuOpen, color, onDelete, onEd
                 onClose={() => setIsEditModalOpen(false)}
                 onConfirm={confirmEdit}
                 currentName={board.name}
+            />
+
+            <WorkspaceMembersModal
+                isOpen={isMembersModalOpen}
+                onClose={() => setIsMembersModalOpen(false)}
+                workspaceId={board.id}
+                workspaceName={board.name}
             />
         </div>
     );
