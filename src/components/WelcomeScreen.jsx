@@ -3,6 +3,7 @@ import Navbar from "./Navbar.jsx";
 import MainApp from "./MainApp.jsx";
 import NotificationManager, {setNotificationManager} from "./notifications/NotificationManager.jsx";
 import {useEffect, useRef, useState} from "react";
+import { MenuProvider } from "./MenuContext.jsx";
 
 
 export default function WelcomeScreen() {
@@ -21,14 +22,15 @@ export default function WelcomeScreen() {
         setWorkspaceColor(color);
     };
     return (
-        <div className="relative h-screen">
-            <Menu className="z-50" onWorkspaceSelect={handleWorkspaceSelect} />
-            <div className="flex flex-col h-full">
-                <Navbar className="z-10" selectedWorkspace={selectedWorkspace} workspaceColor={workspaceColor} />
-                <MainApp selectedWorkspace={selectedWorkspace} />
+        <MenuProvider>
+            <div className="relative h-screen">
+                <Menu className="z-50" onWorkspaceSelect={handleWorkspaceSelect} />
+                <div className="flex flex-col h-full">
+                    <Navbar className="z-10" selectedWorkspace={selectedWorkspace} workspaceColor={workspaceColor} />
+                    <MainApp selectedWorkspace={selectedWorkspace} />
+                </div>
+                <NotificationManager ref={notificationManagerRef} />
             </div>
-            <NotificationManager ref={notificationManagerRef} />
-        </div>
-
+        </MenuProvider>
     );
 } 

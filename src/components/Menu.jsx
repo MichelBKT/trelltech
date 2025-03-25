@@ -4,7 +4,7 @@ import Home from "./icons/Home.jsx";
 import Suitcase from "./icons/Suitcase.jsx";
 import ToggleOnDarkMode from "./icons/ToggleOnDarkMode.jsx";
 import Cookies from 'js-cookie';
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import ToggleOffDarkMode from "./icons/ToggleOffDarkMode.jsx";
 import { getBoards, getLists, deleteBoard, updateBoard, createBoard, getBoardMembers, inviteMember } from "../api/trelloApi";
 import WorkspaceItem from "./workspace/WorkspaceItem.jsx";
@@ -12,13 +12,15 @@ import CreateWorkspaceModal from "./workspace/CreateWorkspaceModal.jsx";
 import MembersList from "./workspace/MembersList.jsx";
 import PropTypes from "prop-types";
 import BrandWhiteIcon from "./icons/BrandWhiteIcon.jsx";
+import { MenuContext } from "./MenuContext";
 
 Menu.propTypes = {
     onWorkspaceSelect: PropTypes.func.isRequired,
 }
+
 export default function Menu({ onWorkspaceSelect }) {
+    const {isMenuOpen, setIsMenuOpen} = useContext(MenuContext);
     const [darkMode, setDarkMode] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(true);
     const [boards, setBoards] = useState([]);
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [lists, setLists] = useState([]);
@@ -42,7 +44,7 @@ export default function Menu({ onWorkspaceSelect }) {
                 setBoards([]);
             }
         };
-        loadBoards();
+        loadBoards().then();
     }, []);
 
     useEffect(() => {
@@ -148,10 +150,12 @@ export default function Menu({ onWorkspaceSelect }) {
         }
     };
 
+    const handleToggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
     return (
-        <div className={"fixed top-0 left-0 h-full w-64 z-50"}>
-            <aside className="flex flex-col w-20 duration-1000 h-screen content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 border-gray-200 z-50">
-                <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={() => {setIsMenuOpen(!isMenuOpen);}}>
+        <div className={"fixed top-0 left-0 h-full w-24 z-50"}>
+            <aside className="flex flex-col duration-1000 h-screen content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 border-gray-200 z-50">
+                <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={handleToggleMenu}>
                     <ToggleMenu/>
                 </button>
 

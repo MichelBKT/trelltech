@@ -1,6 +1,8 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login.jsx";
+import WelcomeScreen from "./components/WelcomeScreen.jsx";
+import {MenuProvider} from "./components/MenuContext.jsx";
 import Home from "./Home.jsx";
 import Callback from "./Callback.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
