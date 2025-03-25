@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import BrandWhiteIcon from "../src/components/icons/BrandWhiteIcon";
 import BrandIcon from "../src/components/icons/BrandIcon";
@@ -66,9 +66,17 @@ export default function Login() {
                         onClick={handleTrelloLogin}
                         className="btn w-full relative overflow-hidden h-10 p-3 bg-[#0079BF] rounded-[400px] inline-flex justify-center items-center gap-2.5 text-white cursor-pointer hover:bg-[#026AA7] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                     >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22.5C6.21 22.5 1.5 17.79 1.5 12S6.21 1.5 12 1.5 22.5 6.21 22.5 12 17.79 22.5 12 22.5z"/>
-                            <path d="M12 6.5c-3.038 0-5.5 2.462-5.5 5.5s2.462 5.5 5.5 5.5 5.5-2.462 5.5-5.5-2.462-5.5-5.5-5.5zm0 9c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5z"/>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clipPath="url(#clip0_287_5537)">
+                                <g mask="url(#mask0_287_5537)">
+                                    <path d="M17.562 0H2.43802C1.09153 0 0 1.09153 0 2.43802V17.562C0 18.9085 1.09153 20 2.43802 20H17.562C18.9085 20 20 18.9085 20 17.562V2.43802C20 1.09153 18.9085 0 17.562 0ZM8.7 15.5885C8.7 16.2139 8.19302 16.7208 7.56767 16.7208H3.73238C3.10698 16.7208 2.60005 16.2139 2.60005 15.5885V3.90233C2.60005 3.27693 3.10703 2.77 3.73238 2.77H7.56767C8.19307 2.77 8.7 3.27698 8.7 3.90233V15.5885ZM17.4 10.5612C17.4 11.1866 16.893 11.6935 16.2677 11.6935H12.4324C11.807 11.6935 11.3 11.1865 11.3 10.5612V3.90233C11.3 3.27693 11.807 2.77 12.4324 2.77H16.2677C16.8931 2.77 17.4 3.27698 17.4 3.90233V10.5612Z" fill="white"/>
+                                </g>
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_287_5537">
+                                    <rect width="20" height="20" fill="white"/>
+                                </clipPath>
+                            </defs>
                         </svg>
                         Se connecter avec Trello
                     </button>

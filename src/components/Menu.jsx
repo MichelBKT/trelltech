@@ -68,10 +68,6 @@ export default function Menu({ onWorkspaceSelect }) {
         }
     }, [isMenuOpen]);
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
     // Ajoutez ces fonctions manquantes
     const getBoardColor = (boardId) => {
         // Logique pour obtenir la couleur du tableau

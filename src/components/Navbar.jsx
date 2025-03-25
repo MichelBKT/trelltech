@@ -1,14 +1,11 @@
 import Workspace from "./icons/Workspace.jsx";
 import Person from "./icons/Person.jsx";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import NotificationCenter from "./notifications/NotificationCenter.jsx";
 import PropTypes from "prop-types";
 import useFetchUserData from "../hooks/useFetchUserData.jsx";
-import { MenuContext } from "./MenuContext.jsx";
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
-import Menu from "./Menu.jsx";
-import Cookies from 'js-cookie';
 
 Navbar.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -17,7 +14,6 @@ Navbar.propTypes = {
 
 export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const [greeting, setGreeting] = useState("Bonjour");
-    const { isMenuOpen } = useContext(MenuContext);
     const userData = useFetchUserData();
     const navigate = useNavigate();
 
@@ -46,7 +42,7 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
     return (
         <>
             <div className="flex h-18 w-full justify-between border-b-2 border-gray-200 dark:border-violet-900 bg-white dark:bg-purple-950 dark:text-white duration-1000 content-center z-10 gap-4">
-                <div className={`w-64 flex relative ${isMenuOpen ? "left-50" : "left-10"} justify-end items-center font-bold text-black dark:text-gray-300 min-sm:text-xs lg:text-xl gap-4`} >
+                <div className={`w-64 flex relative justify-end items-center font-bold text-black dark:text-gray-300 min-sm:text-xs lg:text-xl gap-4`} >
                     {selectedWorkspace && (
                         <>
                             <Workspace color={workspaceColor || "#ECB500"}/>

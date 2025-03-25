@@ -1,13 +1,8 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Login.jsx";
 import WelcomeScreen from "./components/WelcomeScreen.jsx";
-import {MenuProvider} from "./components/MenuContext.jsx";
-import Home from "./Home.jsx";
-import Callback from "./Callback.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import WelcomeScreen from "./components/WelcomeScreen.jsx";
-import {MenuProvider} from "./components/MenuContext.jsx";
 
 //
 // const env = {
@@ -18,7 +13,6 @@ import {MenuProvider} from "./components/MenuContext.jsx";
 
 export default function App() {
     return (
-        <MenuProvider>
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login/>} />
@@ -30,7 +24,6 @@ export default function App() {
                     } />
                 </Routes>
             </BrowserRouter>
-        </MenuProvider>
     );
 }
 
