@@ -1,11 +1,12 @@
 import Workspace from "./icons/Workspace.jsx";
 import Person from "./icons/Person.jsx";
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import NotificationCenter from "./notifications/NotificationCenter.jsx";
 import PropTypes from "prop-types";
 import useFetchUserData from "../hooks/useFetchUserData.jsx";
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
+import {MenuContext} from "./MenuContext.jsx";
 
 Navbar.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -16,6 +17,7 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const [greeting, setGreeting] = useState("Bonjour");
     const userData = useFetchUserData();
     const navigate = useNavigate();
+    const {isMenuOpen} = useContext(MenuContext);
 
 
     useEffect(() => {
@@ -42,14 +44,12 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
     return (
         <>
             <div className="flex h-18 w-full justify-between border-b-2 border-gray-200 dark:border-violet-900 bg-white dark:bg-purple-950 dark:text-white duration-1000 content-center z-10 gap-4">
-                <div className={`w-64 flex relative justify-end items-center font-bold text-black dark:text-gray-300 min-sm:text-xs lg:text-xl gap-4`} >
-                    {selectedWorkspace && (
-                        <>
-                            <Workspace color={workspaceColor || "#ECB500"}/>
-                            {selectedWorkspace.name}
-                        </>
-                    )}
-                </div>
+                     {selectedWorkspace && (
+                         <div className={`${isMenuOpen ? "left-72": "left-22" } w-20 gap-2 flex items-center relative left-32`}>
+                             <Workspace color={workspaceColor || "#ECB500"} />
+                             <span>{selectedWorkspace.name}</span>
+                         </div>
+                     )}
                 <div className="w-20 flex items-center relative left-12 lg:left-120 xl:left-250">
                     {userData && <NotificationCenter userId={userData.id} />}
                 </div>

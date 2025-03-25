@@ -1,8 +1,10 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Login from "./Login.jsx";
-import WelcomeScreen from "./components/WelcomeScreen.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Home from "./Home.jsx";
+import Callback from "./Callback.jsx";
+import {MenuProvider} from "./components/MenuContext.jsx";
 
 //
 // const env = {
@@ -13,17 +15,20 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
     return (
+        <MenuProvider>
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login/>} />
-                    <Route path="/" element={<Login/>} />
-                    <Route path="/home" element={
+                    <Route path="/callback" element={<Callback/>} />
+                    <Route path="/" element={<Navigate to="/home" replace />} />
+                    <Route path ="/home" element={
                         <ProtectedRoute>
-                            <WelcomeScreen />
+                            <Home />
                         </ProtectedRoute>
                     } />
                 </Routes>
             </BrowserRouter>
+        </MenuProvider>
     );
 }
 

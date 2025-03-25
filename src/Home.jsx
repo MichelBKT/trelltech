@@ -4,6 +4,7 @@ import Menu from "./components/Menu.jsx";
 import { getBoards } from "./api/trelloApi.js";
 import PropTypes from "prop-types";
 import AppWelcome from "./components/AppWelcome.jsx";
+import BoardView from "./components/board/BoardView.jsx";
 
 export default function Home() {
     const [boards, setBoards] = useState([]);
@@ -24,7 +25,7 @@ export default function Home() {
     };
 
     return (
-        <div className="flex h-screen bg-white dark:bg-purple-950">
+        <div className="flex h-screen bg-purple-100 dark:bg-purple-950">
             <Menu 
                 boards={boards} 
                 selectedWorkspace={selectedWorkspace} 
@@ -35,13 +36,16 @@ export default function Home() {
                     selectedWorkspace={selectedWorkspace} 
                     workspaceColor={workspaceColor}
                 />
-                <div className="flex-1 p-6">
+                <div className="flex flex-col w-full h-full overflow-hidden">
                     {selectedWorkspace ? (
                         <div>
                             <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
                                 {selectedWorkspace.name}
                             </h1>
-                            {/* Contenu du workspace sélectionné */}
+                                <BoardView
+                                    boardId={selectedWorkspace.id}
+                                    backgroundColor={workspaceColor}
+                                />
                         </div>
                     ) : (
                         <AppWelcome />

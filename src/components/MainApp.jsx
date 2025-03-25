@@ -13,7 +13,6 @@ export default function MainApp({ selectedWorkspace, workspaceColor }) {
             {selectedWorkspace ? (
                 <BoardView
                     boardId={selectedWorkspace.id}
-                    backgroundColor={workspaceColor}
                 />
             ) : (
                 <AppWelcome/>

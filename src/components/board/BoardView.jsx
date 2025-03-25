@@ -10,7 +10,7 @@ BoardView.propTypes = {
     backgroundColor: PropTypes.string,
 };
 
-export default function BoardView({ boardId, backgroundColor }) {
+export default function BoardView({ boardId}) {
     const {isMenuOpen} = useContext(MenuContext);
     useFetchBoardData(boardId);
     const { lists } = useFetchBoardData(boardId);
@@ -18,8 +18,7 @@ export default function BoardView({ boardId, backgroundColor }) {
 
     return (
         <div
-            className={`h-full relative ${isMenuOpen ? "left-72" : "left-32"} overflow-x-auto p-6 flex items-start space-x-4`}
-            style={{ backgroundColor: backgroundColor || 'transparent' }}
+            className={`h-full relative ${isMenuOpen ? "left-72" : "left-32"} overflow-x-auto flex items-start space-x-4`}
         >
             {lists.map((list) => (
                 <List
