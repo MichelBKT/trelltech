@@ -5,6 +5,10 @@ import NotificationCenter from "./notifications/NotificationCenter.jsx";
 import PropTypes from "prop-types";
 import useFetchUserData from "../hooks/useFetchUserData.jsx";
 import { MenuContext } from "./MenuContext.jsx";
+import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
+import Menu from "./Menu.jsx";
+import Cookies from 'js-cookie';
 
 Navbar.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -15,6 +19,8 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const [greeting, setGreeting] = useState("Bonjour");
     const { isMenuOpen } = useContext(MenuContext);
     const userData = useFetchUserData();
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const currentHour = new Date().getHours();

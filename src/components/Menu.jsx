@@ -62,13 +62,90 @@ export default function Menu({ onWorkspaceSelect }) {
         if (isMenuOpen) {
             menu.classList.add('w-64');
             menu.classList.remove('w-20');
-            setIsMenuOpen(true);
         } else {
             menu.classList.add('w-20');
             menu.classList.remove('w-64');
-            setIsMenuOpen(false);
         }
     }, [isMenuOpen]);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    // Ajoutez ces fonctions manquantes
+    const getBoardColor = (boardId) => {
+        // Logique pour obtenir la couleur du tableau
+        if (boardColors[boardId]) {
+            return boardColors[boardId];
+        }
+        // Couleur par défaut ou génération aléatoire
+        return "#" + Math.floor(Math.random()*16777215).toString(16);
+    };
+
+    const handleWorkspaceClick = (board) => {
+        setSelectedBoard(board);
+        onWorkspaceSelect(board, getBoardColor(board.id));
+
+        // Charger les membres du tableau
+        loadBoardMembers(board.id);
+    };
+
+    const loadBoardMembers = async (boardId) => {
+        try {
+            const members = await getBoardMembers(boardId);
+            setBoardMembers(members);
+        } catch (error) {
+            console.error('Erreur lors du chargement des membres:', error);
+        }
+    };
+
+    const handleDeleteBoard = async (boardId) => {
+        try {
+            await deleteBoard(boardId);
+            setBoards(boards.filter(board => board.id !== boardId));
+            if (selectedBoard && selectedBoard.id === boardId) {
+                setSelectedBoard(null);
+                onWorkspaceSelect(null, null);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du tableau:', error);
+        }
+    };
+
+    const handleEditBoard = async (boardId, newName) => {
+        try {
+            await updateBoard(boardId, { name: newName });
+            setBoards(boards.map(board =>
+                board.id === boardId ? { ...board, name: newName } : board
+            ));
+        } catch (error) {
+            console.error('Erreur lors de la modification du tableau:', error);
+        }
+    };
+
+    const handleCreateBoard = async (boardData) => {
+        try {
+            const newBoard = await createBoard(boardData);
+            setBoards([...boards, newBoard]);
+            setIsCreateModalOpen(false);
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de la création du tableau:', error);
+            return false;
+        }
+    };
+
+    const handleInviteMember = async (boardId, email) => {
+        try {
+            await inviteMember(boardId, email);
+            // Recharger les membres après l'invitation
+            loadBoardMembers(boardId);
+            return true;
+        } catch (error) {
+            console.error('Erreur lors de l\'invitation:', error);
+            return false;
+        }
+    };
 
     const toggleDarkMode = () => {
         const newDarkMode = !darkMode;
@@ -79,74 +156,6 @@ export default function Menu({ onWorkspaceSelect }) {
         } else {
             document.documentElement.classList.remove('dark');
             Cookies.set('dark', 'false', { expires: 365 });
-        }
-    };
-
-    const getRandomColor = () => {
-        const colors = ['#ECB500', '#23C000', '#21A6C3', '#FF6B6B', '#4ECDC4'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    };
-
-    const getBoardColor = (boardId) => {
-        if (!boardColors[boardId]) {
-            setBoardColors(prev => ({
-                ...prev,
-                [boardId]: getRandomColor()
-            }));
-            return getRandomColor();
-        }
-        return boardColors[boardId];
-    };
-
-    const handleDeleteBoard = async (boardId) => {
-        const success = await deleteBoard(boardId);
-        if (success) {
-            setBoards(prevBoards => prevBoards.filter(board => board.id !== boardId));
-            if (selectedBoard?.id === boardId) {
-                setSelectedBoard(null);
-                onWorkspaceSelect(null, null);
-            }
-        }
-    };
-
-    const handleEditBoard = async (boardId, newName) => {
-        const updatedBoard = await updateBoard(boardId, newName);
-        if (updatedBoard) {
-            setBoards(prevBoards => 
-                prevBoards.map(board => 
-                    board.id === boardId ? { ...board, name: newName } : board
-                )
-            );
-            if (selectedBoard?.id === boardId) {
-                setSelectedBoard(updatedBoard);
-                onWorkspaceSelect(updatedBoard, getBoardColor(boardId));
-            }
-        }
-    };
-
-    const handleCreateBoard = async (name) => {
-        const newBoard = await createBoard(name);
-        if (newBoard) {
-            setBoards(prevBoards => [...prevBoards, newBoard]);
-            setSelectedBoard(newBoard);
-            onWorkspaceSelect(newBoard, getBoardColor(newBoard.id));
-        }
-    };
-
-    const handleWorkspaceClick = async (board) => {
-        setSelectedBoard(board);
-        onWorkspaceSelect(board, getBoardColor(board.id));
-        const members = await getBoardMembers(board.id);
-        setBoardMembers(members);
-    };
-
-    const handleInviteMember = async (email) => {
-        if (selectedBoard) {
-            const success = await inviteMember(selectedBoard.id, email);
-            if (success) {
-                const updatedMembers = await getBoardMembers(selectedBoard.id);
-                setBoardMembers(updatedMembers);
-            }
         }
     };
 
@@ -206,7 +215,7 @@ export default function Menu({ onWorkspaceSelect }) {
                     </div>
                 ))}
 
-                <MembersList 
+                <MembersList
                     isMenuOpen={isMenuOpen}
                     selectedBoard={selectedBoard}
                     boardMembers={boardMembers}
@@ -227,4 +236,3 @@ export default function Menu({ onWorkspaceSelect }) {
         </div>
     );
 }
-

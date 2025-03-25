@@ -6,6 +6,8 @@ import {MenuProvider} from "./components/MenuContext.jsx";
 import Home from "./Home.jsx";
 import Callback from "./Callback.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import WelcomeScreen from "./components/WelcomeScreen.jsx";
+import {MenuProvider} from "./components/MenuContext.jsx";
 
 //
 // const env = {
@@ -16,21 +18,19 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/callback" element={<Callback />} />
-                <Route path="/" element={<Navigate to="/home" replace />} />
-                <Route 
-                    path="/home" 
-                    element={
+        <MenuProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/login" element={<Login/>} />
+                    <Route path="/" element={<Login/>} />
+                    <Route path="/home" element={
                         <ProtectedRoute>
-                            <Home />
+                            <WelcomeScreen />
                         </ProtectedRoute>
-                    } 
-                />
-            </Routes>
-        </BrowserRouter>
+                    } />
+                </Routes>
+            </BrowserRouter>
+        </MenuProvider>
     );
 }
 

@@ -15,7 +15,7 @@ export default function Home() {
             const fetchedBoards = await getBoards();
             setBoards(fetchedBoards);
         };
-        fetchBoards();
+        fetchBoards().then();
     }, []);
 
     const handleWorkspaceSelect = (board) => {
