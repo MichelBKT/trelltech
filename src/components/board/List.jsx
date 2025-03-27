@@ -38,7 +38,7 @@ export default function List({ list, onUpdate }) {
     };
 
     return (
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg min-w-[280px] w-[280px] flex flex-col max-h-full">
+        <div className="bg-white dark:bg-brandColorDark border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full">
             <div className="p-3 flex justify-between items-center">
                 {isEditing ? (
                     <div className="flex w-full">

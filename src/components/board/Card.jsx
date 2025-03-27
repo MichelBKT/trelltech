@@ -12,6 +12,7 @@ export default function Card({ card, onUpdate }) {
     const [cardName, setCardName] = useState(card.name);
     const [cardDesc, setCardDesc] = useState(card.desc || '');
 
+
     const handleSaveCard = async () => {
         try {
             await updateCard(card.id, { name: cardName, desc: cardDesc });
@@ -79,7 +80,7 @@ export default function Card({ card, onUpdate }) {
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteCard();
+                        handleDeleteCard().then();
                     }}
                     className="text-gray-500 hover:text-red-500 dark:text-gray-400"
                 >

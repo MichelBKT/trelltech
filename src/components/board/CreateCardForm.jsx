@@ -30,10 +30,10 @@ export default function CreateCardForm({ listId, onCardCreated, onCancel }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-700 p-2 rounded shadow">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-700 p-2 rounded-2xl shadow">
       <textarea
           placeholder="Entrez un titre pour cette carte..."
-          className="w-full px-2 py-1 rounded mb-2 dark:bg-gray-600 dark:text-white"
+          className="w-full px-2 py-1 rounded-lg mb-2 dark:bg-gray-600 dark:text-white"
           value={cardName}
           onChange={(e) => setCardName(e.target.value)}
           rows={3}
@@ -42,7 +42,7 @@ export default function CreateCardForm({ listId, onCardCreated, onCancel }) {
             <div className="flex space-x-2">
                 <button
                     type="submit"
-                    className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+                    className="px-3 py-1 bg-purple-800 text-white rounded disabled:opacity-50"
                     disabled={isSubmitting || !cardName.trim()}
                 >
                     {isSubmitting ? 'Création...' : 'Ajouter'}
