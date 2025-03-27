@@ -25,7 +25,7 @@ export default function Home() {
     };
 
     return (
-        <div className="flex h-screen bg-purple-100 dark:bg-purple-950">
+        <div className="flex h-screen bg-pureLightBG dark:bg-pureDarkBG">
             <Menu 
                 boards={boards} 
                 selectedWorkspace={selectedWorkspace} 

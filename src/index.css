@@ -1,3 +1,13 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme  {
+    --color-pureDark: #360553;
+    --color-pureDarkBG: #2F0449;
+    --color-pureDarkStroke: #8B09DC;
+    --color-pureLightBG: #FBF4FF;
+    --color-brandColorDark: #6A1B9A;
+    --color-brandColor: #8A2BE2;
+    --color-brandCcolor2: #F3E8FF;
+}

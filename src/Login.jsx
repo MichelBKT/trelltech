@@ -39,7 +39,7 @@ export default function Login() {
     };
 
     return (
-        <div className="w-full h-screen block items-center justify-center bg-white dark:bg-purple-950">
+        <div className="w-full h-screen block items-center justify-center bg-white dark:bg-pureDark">
             <div className="w-full flex px-12 py-4 space-x-0 items-center justify-between">
                 <div className="inline-flex font-extrabold text-4xl bg-gradient-to-b dark:text-white from-blue-400 to-purple-500 bg-clip-text text-transparent">
                     <BrandIcon />
@@ -47,7 +47,10 @@ export default function Login() {
                     AGILIX
                 </div>
                 <div>
-                    <button onClick={toggleDarkMode} className="">
+                    <button
+                        onClick={toggleDarkMode}
+                        className="flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8"
+                    >
                         {darkMode ? <ToggleOnDarkMode /> : <ToggleOffDarkMode />}
                     </button>
                 </div>

@@ -159,7 +159,7 @@ export default function Menu({ onWorkspaceSelect }) {
 
     return (
         <div className={"fixed top-0 left-0 h-full w-20 z-50"}>
-            <aside className="flex flex-col duration-1000 h-screen content-center bg-white dark:bg-purple-950 border-r-2 dark:border-violet-900 border-gray-200 z-50">
+            <aside className="flex flex-col duration-1000 h-screen content-center bg-white dark:bg-pureDark border-r-2 dark:border-violet-900 border-gray-200 z-50">
                 <button type="button" className={`${isMenuOpen ? "justify-end p-2" : "p-2"} flex focus:outline-none cursor-pointer transition-colors duration-1000 rounded-lg dark:hover:bg-gray-800 hover:bg-gray-100 gap-y-8`} onClick={handleToggleMenu}>
                     <ToggleMenu/>
                 </button>

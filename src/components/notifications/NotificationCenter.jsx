@@ -21,7 +21,7 @@ export default function NotificationCenter({ userId }) {
 
     useEffect(() => {
         if (userId) {
-            fetchNotifications(userId);
+            fetchNotifications(userId).then()
         }
     }, [userId]);
 

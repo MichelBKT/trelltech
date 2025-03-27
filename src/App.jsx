@@ -5,6 +5,8 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Home from "./Home.jsx";
 import Callback from "./Callback.jsx";
 import {MenuProvider} from "./components/MenuContext.jsx";
+import NotificationManager, {setNotificationManager} from "./components/notifications/NotificationManager.jsx";
+import {useEffect, useRef} from "react";
 
 //
 // const env = {
@@ -14,6 +16,13 @@ import {MenuProvider} from "./components/MenuContext.jsx";
 // };
 
 export default function App() {
+    const notificationManagerRef = useRef(null);
+
+    useEffect(() => {
+        if (notificationManagerRef.current) {
+            setNotificationManager(notificationManagerRef.current);
+        }
+    }, []);
     return (
         <MenuProvider>
             <BrowserRouter>
@@ -28,6 +37,7 @@ export default function App() {
                     } />
                 </Routes>
             </BrowserRouter>
+            <NotificationManager ref={notificationManagerRef} />
         </MenuProvider>
     );
 }
