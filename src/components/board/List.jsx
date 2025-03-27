@@ -1,44 +1,54 @@
-// components/board/List.jsx
-import { useState } from 'react';
+import {useState} from 'react';
 import PropTypes from 'prop-types';
-import Card from './Card';
-import CreateCardForm from './CreateCardForm';
-import { updateList, deleteList } from '../../api/trelloApi';
+import Card from './Card.jsx';
+import {deleteList, updateList} from '../../api/trelloApi.js';
+import CreateCardForm from "./CreateCardForm.jsx";
+import DeleteListModal from "./DeleteListModal.jsx";
 
 List.propTypes = {
-    list: PropTypes.object.isRequired,
-    onUpdate: PropTypes.func.isRequired,
-    boardId: PropTypes.string.isRequired,
+    list: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        cards: PropTypes.array
+    }).isRequired,
+    onUpdate: PropTypes.func.isRequired
 };
 
-export default function List({ list, onUpdate }) {
+export default function List({list, onUpdate}) {
     const [isEditing, setIsEditing] = useState(false);
     const [listName, setListName] = useState(list.name);
     const [showCardForm, setShowCardForm] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    const handleSaveName = async () => {
-        try {
-            await updateList(list.id, { name: listName });
-            setIsEditing(false);
-            onUpdate();
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour de la liste', error);
-        }
-    };
-
-    const handleDeleteList = async () => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cette liste ?')) {
-            try {
-                await deleteList(list.id);
+    function update() {
+        setIsEditing(false);
+        // Supprimer setListName(list.name) ici
+        updateList(list.id, {name: listName})
+            .then(() => {
                 onUpdate();
-            } catch (error) {
-                console.error('Erreur lors de la suppression de la liste', error);
-            }
-        }
-    };
+            })
+            .catch((error) => {
+                console.error("Error updating list name:", error);
+            });
+    }
+    function handleDelete() {
+        setIsDeleteModalOpen(true);
+    }
+
+    function confirmDelete() {
+        deleteList(list.id)
+            .then(() => {
+                onUpdate();
+            })
+            .catch((error) => {
+                console.error("Error deleting list:", error);
+            });
+        setIsDeleteModalOpen(false);
+    }
 
     return (
-        <div className="bg-white dark:bg-brandColorDark border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full">
+        <div
+            className="bg-white dark:bg-brandColorDark border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full">
             <div className="p-3 flex justify-between items-center">
                 {isEditing ? (
                     <div className="flex w-full">
@@ -50,7 +60,7 @@ export default function List({ list, onUpdate }) {
                             autoFocus
                         />
                         <button
-                            onClick={handleSaveName}
+                            onClick={update}
                             className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
                         >
                             ✓
@@ -64,8 +74,14 @@ export default function List({ list, onUpdate }) {
                         {list.name}
                     </h3>
                 )}
+                <DeleteListModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    onConfirm={confirmDelete}
+                    listName={list.name}
+                />
                 <button
-                    onClick={handleDeleteList}
+                    onClick={handleDelete}
                     className="text-gray-500 hover:text-red-500 dark:text-gray-400"
                 >
                     ×

@@ -18,13 +18,34 @@ Menu.propTypes = {
     onWorkspaceSelect: PropTypes.func.isRequired,
 }
 
+export const getBoardColor = (boardId) => {
+    const boardColors = {
+        "0": "#FF5733",
+        "1": "#33FF57",
+        "2": "#FF33A1",
+        "3": "#3357FF",
+        "4": "#FF33FF",
+        "5": "#FFFF33",
+    };
+
+    // Créer un hash simple à partir de l'ID
+    let hash = 0;
+    const idStr = boardId.toString();
+    for (let i = 0; i < idStr.length; i++) {
+        hash = (hash * 31 + idStr.charCodeAt(i)) & 0xffffffff;
+    }
+
+    // Utiliser le hash pour déterminer l'index de couleur
+    const colorIndex = Math.abs(hash % Object.keys(boardColors).length);
+    return boardColors[colorIndex.toString()];
+};
+
 export default function Menu({ onWorkspaceSelect }) {
     const {isMenuOpen, setIsMenuOpen} = useContext(MenuContext);
     const [darkMode, setDarkMode] = useState(false);
     const [boards, setBoards] = useState([]);
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [lists, setLists] = useState([]);
-    const [boardColors, setBoardColors] = useState({});
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [boardMembers, setBoardMembers] = useState([]);
 
@@ -67,16 +88,6 @@ export default function Menu({ onWorkspaceSelect }) {
             menu.classList.remove('w-64');
         }
     }, [isMenuOpen]);
-
-    // Ajoutez ces fonctions manquantes
-    const getBoardColor = (boardId) => {
-        // Logique pour obtenir la couleur du tableau
-        if (boardColors[boardId]) {
-            return boardColors[boardId];
-        }
-        // Couleur par défaut ou génération aléatoire
-        return "#" + Math.floor(Math.random()*16777215).toString(16);
-    };
 
     const handleWorkspaceClick = (board) => {
         setSelectedBoard(board);

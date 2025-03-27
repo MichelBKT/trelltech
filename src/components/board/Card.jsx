@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { updateCard, deleteCard } from '../../api/trelloApi';
+import DeleteCardModal from './DeleteCardModal';
 
 Card.propTypes = {
     card: PropTypes.object.isRequired,
@@ -11,7 +12,7 @@ export default function Card({ card, onUpdate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [cardName, setCardName] = useState(card.name);
     const [cardDesc, setCardDesc] = useState(card.desc || '');
-
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const handleSaveCard = async () => {
         try {
@@ -23,14 +24,18 @@ export default function Card({ card, onUpdate }) {
         }
     };
 
-    const handleDeleteCard = async () => {
-        if (window.confirm('Êtes-vous sûr de vouloir supprimer cette carte ?')) {
-            try {
-                await deleteCard(card.id);
-                onUpdate();
-            } catch (error) {
-                console.error('Erreur lors de la suppression de la carte', error);
-            }
+    const handleDeleteCard = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDeleteCard = async () => {
+        try {
+            await deleteCard(card.id);
+            onUpdate();
+        } catch (error) {
+            console.error('Erreur lors de la suppression de la carte', error);
+        } finally {
+            setIsDeleteModalOpen(false);
         }
     };
 
@@ -71,38 +76,47 @@ export default function Card({ card, onUpdate }) {
     }
 
     return (
-        <div
-            className="bg-white dark:bg-gray-700 p-3 rounded shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600"
-            onClick={() => setIsEditing(true)}
-        >
-            <div className="flex justify-between items-start">
-                <h4 className="text-gray-800 dark:text-white font-medium">{card.name}</h4>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteCard().then();
-                    }}
-                    className="text-gray-500 hover:text-red-500 dark:text-gray-400"
-                >
-                    ×
-                </button>
-            </div>
-            {card.desc && (
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 truncate">
-                    {card.desc}
-                </p>
-            )}
-            {card.labels && card.labels.length > 0 && (
-                <div className="flex mt-2 flex-wrap gap-1">
-                    {card.labels.map((label) => (
-                        <span
-                            key={label.id}
-                            className="inline-block h-2 w-8 rounded"
-                            style={{ backgroundColor: label.color || '#ddd' }}
-                        />
-                    ))}
+        <>
+            <div
+                className="bg-white dark:bg-gray-700 p-3 rounded shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600"
+                onClick={() => setIsEditing(true)}
+            >
+                <div className="flex justify-between items-start">
+                    <h4 className="text-gray-800 dark:text-white font-medium">{card.name}</h4>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCard();
+                        }}
+                        className="text-gray-500 hover:text-red-500 dark:text-gray-400"
+                    >
+                        ×
+                    </button>
                 </div>
-            )}
-        </div>
+                {card.desc && (
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 truncate">
+                        {card.desc}
+                    </p>
+                )}
+                {card.labels && card.labels.length > 0 && (
+                    <div className="flex mt-2 flex-wrap gap-1">
+                        {card.labels.map((label) => (
+                            <span
+                                key={label.id}
+                                className="inline-block h-2 w-8 rounded"
+                                style={{ backgroundColor: label.color || '#ddd' }}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <DeleteCardModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDeleteCard}
+                cardName={card.name}
+            />
+        </>
     );
 }
