@@ -261,3 +261,32 @@ export const inviteMember = async (boardId, email) => {
         return false;
     }
 };
+
+export const updateListsOrder = async (boardId, reorderedLists, listData) => {
+    try {
+        const response = await trelloApi.put(`/boards/${boardId}/lists`, {
+            value: reorderedLists,
+            idBoard: listData.idBoard,
+            name: listData.name,
+
+        });
+        return await response.data || [];
+    } catch (error) {
+        console.error("Error updating list order:", error);
+        throw error;
+    }
+};
+
+export const updateCardsOrder = async (listId, reorderedCards) => {
+    try {
+        const response = await trelloApi.put(`/lists/${listId}/cards`, {
+            cards: reorderedCards,
+        });
+        return await response.data || [];
+
+    } catch (error) {
+        console.error("Error updating card order:", error);
+        throw error;
+
+    }
+};

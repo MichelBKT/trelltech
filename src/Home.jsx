@@ -40,17 +40,12 @@ export default function Home() {
                     workspaceColor={workspaceColor}
                     className={`${isMenuOpen ? "left-220" : "left-120"} transition-all duration-300`}
                 />
-                <div className="flex flex-col w-full h-full overflow-hidden">
+                <div className="flex flex-col w-full h-full overflow-hidden p-4">
                     {selectedWorkspace ? (
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-                                {selectedWorkspace.name}
-                            </h1>
-                                <BoardView
-                                    boardId={selectedWorkspace.id}
-                                    backgroundColor={workspaceColor.backgroundColor}
-                                />
-                        </div>
+                        <BoardView
+                            boardId={selectedWorkspace.id}
+                            backgroundColor={workspaceColor.backgroundColor}
+                        />
                     ) : (
                         <AppWelcome />
                     )}

@@ -1,9 +1,15 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Card from './Card.jsx';
-import {deleteList, updateList} from '../../api/trelloApi.js';
+import {
+    deleteList,
+    updateList,
+    createCard,
+    updateCardsOrder
+} from '../../api/trelloApi.js';
 import CreateCardForm from "./CreateCardForm.jsx";
 import DeleteListModal from "./DeleteListModal.jsx";
+import { Droppable } from 'react-beautiful-dnd';
 
 List.propTypes = {
     list: PropTypes.shape({
@@ -11,45 +17,46 @@ List.propTypes = {
         name: PropTypes.string.isRequired,
         cards: PropTypes.array
     }).isRequired,
-    onUpdate: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired,
+    boardId: PropTypes.string.isRequired,
+    dragHandleProps: PropTypes.object,
 };
 
-export default function List({list, onUpdate}) {
+export default function List({ list, onUpdate, boardId, dragHandleProps }) {
     const [isEditing, setIsEditing] = useState(false);
     const [listName, setListName] = useState(list.name);
     const [showCardForm, setShowCardForm] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    function update() {
+    const update = async () => {
         setIsEditing(false);
-        // Supprimer setListName(list.name) ici
-        updateList(list.id, {name: listName})
-            .then(() => {
-                onUpdate();
-            })
-            .catch((error) => {
-                console.error("Error updating list name:", error);
-            });
-    }
-    function handleDelete() {
-        setIsDeleteModalOpen(true);
-    }
+        try {
+            await updateList(list.id, { name: listName });
+            onUpdate();
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du nom de la liste:", error);
+        }
+    };
 
-    function confirmDelete() {
-        deleteList(list.id)
-            .then(() => {
-                onUpdate();
-            })
-            .catch((error) => {
-                console.error("Error deleting list:", error);
-            });
+    const handleDelete = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await deleteList(list.id);
+            onUpdate();
+        } catch (error) {
+            console.error("Erreur lors de la suppression de la liste:", error);
+        }
         setIsDeleteModalOpen(false);
-    }
+    };
 
     return (
         <div
-            className="bg-white dark:bg-brandColorDark border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full">
-            <div className="p-3 flex justify-between items-center">
+            className="bg-white dark:bg-brandColorDark border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full"
+        >
+            <div className="p-3 flex justify-between items-center" {...dragHandleProps}>
                 {isEditing ? (
                     <div className="flex w-full">
                         <input
@@ -88,15 +95,30 @@ export default function List({list, onUpdate}) {
                 </button>
             </div>
 
-            <div className="overflow-y-auto p-2 flex-grow">
-                {list.cards && list.cards.map((card) => (
-                    <Card
-                        key={card.id}
-                        card={card}
-                        onUpdate={onUpdate}
-                    />
-                ))}
-            </div>
+            <Droppable droppableId={list.id} type="CARD">
+                {(provided, snapshot) => (
+                    <div
+                        className="overflow-y-auto p-2 flex-grow"
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        style={{
+                            background: snapshot.isDraggingOver ? '#e0f7fa' : 'inherit',
+                            minHeight: '100px',
+                        }}
+                    >
+                        {list.cards && list.cards.map((card, index) => (
+                            <Card
+                                key={card.id}
+                                card={card}
+                                onUpdate={onUpdate}
+                                index={index}
+                                listId={list.id}
+                            />
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
 
             <div className="p-2">
                 {showCardForm ? (
@@ -111,7 +133,7 @@ export default function List({list, onUpdate}) {
                 ) : (
                     <button
                         onClick={() => setShowCardForm(true)}
-                        className="w-full text-left px-3 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"
+                        className="w-full text-left text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     >
                         + Ajouter une carte
                     </button>
