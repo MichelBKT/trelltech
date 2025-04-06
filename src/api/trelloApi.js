@@ -323,3 +323,29 @@ export const updateCardPosition = async (cardId, newPos, newListId = null) => {
         throw error;
     }
 };
+
+export const assignMemberToCard = async (cardId, memberId) => {
+    try {
+        const response = await trelloApi.post(`cards/${cardId}/idMembers`, null, {
+            params: {
+                value: memberId
+            }
+        });
+        showNotification('Membre assigné avec succès !', 'success');
+        return response.data;
+    } catch (error) {
+        await handleApiError(error);
+        return null;
+    }
+};
+
+export const removeMemberFromCard = async (cardId, memberId) => {
+    try {
+        const response = await trelloApi.delete(`cards/${cardId}/idMembers/${memberId}`);
+        showNotification('Membre retiré avec succès !', 'success');
+        return response.data;
+    } catch (error) {
+        await handleApiError(error);
+        return null;
+    }
+};

@@ -16,16 +16,17 @@ List.propTypes = {
         cards: PropTypes.array,
     }).isRequired,
     onUpdate: PropTypes.func.isRequired,
-    boardId: PropTypes.string,
-    dragHandleProps: PropTypes.object
+    boardId: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
 };
 
 // eslint-disable-next-line react/prop-types
-export default function List({ list, onUpdate, dragHandleProps, index }) {
+export default function List({ list, onUpdate, index, boardId }) {
     const [isEditing, setIsEditing] = useState(false);
     const [listName, setListName] = useState(list.name);
     const [showCardForm, setShowCardForm] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const update = async () => {
         setIsEditing(false);
@@ -59,7 +60,7 @@ export default function List({ list, onUpdate, dragHandleProps, index }) {
                     {...provided.draggableProps}
                     className="border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full"
                 >
-                    <div className="p-3 flex justify-between items-center" {...dragHandleProps}>
+                    <div className="p-3 flex justify-between items-center" {...provided.dragHandleProps}>
                         {isEditing ? (
                             <div className="flex w-full">
                                 <input
@@ -101,12 +102,16 @@ export default function List({ list, onUpdate, dragHandleProps, index }) {
                     <Droppable droppableId={list.id} type="CARD" isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
                         {(provided, snapshot) => (
                             <div
-                                className="overflow-y-auto p-2 flex-grow"
+                                className="flex-grow"
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                                 style={{
                                     background: snapshot.isDraggingOver ? '#e0f7fa' : 'inherit',
                                     minHeight: '100px',
+                                    maxHeight: 'calc(100vh - 200px)',
+                                    overflowY: 'auto',
+                                    padding: '8px',
+                                    transition: 'background-color 0.2s ease'
                                 }}
                             >
                                 {list.cards && list.cards.map((card, index) => (
@@ -116,6 +121,8 @@ export default function List({ list, onUpdate, dragHandleProps, index }) {
                                         onUpdate={onUpdate}
                                         index={index}
                                         listId={list.id}
+                                        boardId={boardId}
+                                        isDragging={isDragging}
                                     />
                                 ))}
                                 {provided.placeholder}
