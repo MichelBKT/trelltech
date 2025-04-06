@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 import useFetchUserData from "../hooks/useFetchUserData.jsx";
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
-import {MenuContext} from "./MenuContext.jsx";
 import NotificationManager, {setNotificationManager} from "./notifications/NotificationManager.jsx";
+import {MenuContext} from "./MenuContext.jsx";
 
 Navbar.propTypes = {
     selectedWorkspace: PropTypes.object,
@@ -20,6 +20,7 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
     const navigate = useNavigate();
     const {isMenuOpen} = useContext(MenuContext);
     const notificationManagerRef = useRef(null);
+
 
     useEffect(() => {
         if (notificationManagerRef.current) {
@@ -50,7 +51,7 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
 
     return (
         <>
-            <div className="flex h-18 lg:w-384 min-md:w-346 min-sm:326 w-332 justify-between border-b-2 border-gray-200 dark:border-violet-950 bg-white dark:bg-pureDark dark:text-white duration-1000 content-center z-10 gap-4">
+            <div className="flex h-18 lg:w-384 min-md:w-346 min-sm:326 justify-between border-b-2 border-gray-200 dark:border-violet-950 bg-white dark:bg-pureDark dark:text-white duration-1000 content-center z-10 gap-4">
                      {selectedWorkspace && (
                          <div className={`${isMenuOpen ? "left-72": "left-22" } w-20 gap-2 flex items-center relative left-32`}>
                              <Workspace color={workspaceColor} />

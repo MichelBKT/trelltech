@@ -5,7 +5,7 @@ import { createList } from '../../api/trelloApi';
 
 CreateListForm.propTypes = {
     boardId: PropTypes.string.isRequired,
-    onListCreated: PropTypes.func.isRequired,
+    onListCreated: PropTypes.func,
 };
 
 export default function CreateListForm({ boardId, onListCreated }) {
@@ -42,7 +42,7 @@ export default function CreateListForm({ boardId, onListCreated }) {
     }
 
     return (
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg min-w-[280px] p-3">
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl min-w-[280px] p-3">
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -55,14 +55,14 @@ export default function CreateListForm({ boardId, onListCreated }) {
                 <div className="flex space-x-2">
                     <button
                         type="submit"
-                        className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+                        className="px-3 py-1 bg-purple-800 text-white rounded disabled:opacity-50"
                         disabled={isSubmitting || !listName.trim()}
                     >
                         {isSubmitting ? 'Création...' : 'Ajouter la liste'}
                     </button>
                     <button
                         type="button"
-                        className="px-3 py-1 bg-gray-300 dark:bg-gray-600 rounded"
+                        className="px-3 py-1 bg-gray-300 dark:bg-gray-200 rounded"
                         onClick={() => setShowForm(false)}
                     >
                         Annuler

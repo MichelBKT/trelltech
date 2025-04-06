@@ -35,15 +35,15 @@ export default function Login() {
     const handleTrelloLogin = () => {
         const REDIRECT_URI = 'http://localhost:5173/callback';
         const SCOPE = 'read,write,account';
-        
+
         const authUrl = `https://trello.com/1/authorize?response_type=token&key=${import.meta.env.VITE_TRELLO_API_KEY}&return_url=${REDIRECT_URI}&scope=${SCOPE}&expiration=never&name=Agilix`;
-        
+
         window.location.href = authUrl;
     };
 
     return (
-        <div className="w-full h-screen block items-center justify-center bg-white dark:bg-pureDark">
-            <div className="w-full flex px-12 py-4 space-x-0 items-center justify-between">
+        <div className="w-full h-200 flex justify-center bg-white dark:bg-pureDark">
+            <div className="w-full h-26 flex px-12 py-4 space-x-0 items-center justify-between">
                 <div className="inline-flex font-extrabold text-4xl bg-gradient-to-b dark:text-white from-blue-400 to-purple-500 bg-clip-text text-transparent">
                     <BrandIcon />
                     <BrandWhiteIcon />
