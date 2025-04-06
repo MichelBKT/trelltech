@@ -5,14 +5,19 @@ InviteMemberModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     onInvite: PropTypes.func.isRequired,
+    boardId: PropTypes.string.isRequired,
 }
 
-export default function InviteMemberModal({ isOpen, onClose, onInvite }) {
+export default function InviteMemberModal({ isOpen, onClose, onInvite, boardId }) {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!boardId) {
+            setError('Erreur: ID du tableau non disponible');
+            return;
+        }
         if (!email) {
             setError('Veuillez entrer une adresse email');
             return;
@@ -21,7 +26,7 @@ export default function InviteMemberModal({ isOpen, onClose, onInvite }) {
             setError('Veuillez entrer une adresse email valide');
             return;
         }
-        onInvite(email);
+        onInvite(boardId, email);
         setEmail('');
         setError('');
     };

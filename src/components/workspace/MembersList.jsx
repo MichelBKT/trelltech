@@ -14,8 +14,8 @@ MembersList.propTypes = {
 export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, onInviteMember }) {
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-    const handleInvite = async (email) => {
-        await onInviteMember(email);
+    const handleInvite = async (boardId, email) => {
+        await onInviteMember(boardId, email);
         setIsInviteModalOpen(false);
     };
 
@@ -66,6 +66,7 @@ export default function MembersList({ isMenuOpen, selectedBoard, boardMembers, o
                 isOpen={isInviteModalOpen}
                 onClose={() => setIsInviteModalOpen(false)}
                 onInvite={handleInvite}
+                boardId={selectedBoard?.id || ''}
             />
         </>
     );

@@ -1,12 +1,12 @@
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import Notification from './Notification';
-
+import { v4 as uuidv4 } from 'uuid';
 
 const NotificationManager = forwardRef(function NotificationManager(props, ref) {
-const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState([]);
 
     const addNotification = (message, type = 'error') => {
-        const id = Date.now();
+        const id = uuidv4();
         setNotifications(prev => [...prev, { id, message, type }]);
     };
 

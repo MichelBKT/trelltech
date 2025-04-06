@@ -238,21 +238,38 @@ export async function removeMember(boardId, memberId) {
 
 export const inviteMember = async (boardId, email) => {
     try {
+        if (!boardId || typeof boardId !== 'string') {
+            console.error('ID de board invalide:', boardId);
+            showNotification('ID de board invalide', 'error');
+            return false;
+        }
+
+        if (!email || typeof email !== 'string') {
+            console.error('Email invalide:', email);
+            showNotification('Email invalide', 'error');
+            return false;
+        }
+
         const board = await checkPermissions(boardId);
         if (!board) {
             showNotification('Vous n\'avez pas les permissions nécessaires pour inviter des membres.', 'error');
             return false;
         }
 
-        await trelloApi.put(`boards/${boardId}/members`, null, {
+        console.log('Invitation en cours pour le board:', boardId, 'avec l\'email:', email);
+        
+        const response = await trelloApi.put(`boards/${boardId}/members`, null, {
             params: {
                 email: email,
+                type: 'normal'
             }
         });
 
+        console.log('Réponse de l\'API:', response);
         showNotification('Invitation envoyée avec succès !', 'success');
         return true;
     } catch (error) {
+        console.error('Erreur lors de l\'invitation:', error);
         if (error.response?.status === 400) {
             showNotification('Adresse email invalide ou déjà membre du tableau.', 'error');
         } else {
