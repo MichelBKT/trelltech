@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright test --reporter=html",
+    "test:chrome": "playwright test --project=chromium --ui",
+    "test:server": "vite --config vite.config.test.js",
+    "test:all": "npm run test:server & npm run test:chrome"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -27,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@playwright/test": "^1.51.1",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
     "@vitejs/plugin-react": "^4.3.4",
