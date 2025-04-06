@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from "prop-types";
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { getBoardMembers, removeMember } from '../../api/trelloApi';
+import LoadingOverlay from '../LoadingOverlay.jsx';
 
 WorkspaceMembersModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -14,6 +15,7 @@ export default function WorkspaceMembersModal({ isOpen, onClose, workspaceId, wo
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
@@ -35,9 +37,14 @@ export default function WorkspaceMembersModal({ isOpen, onClose, workspaceId, wo
     };
 
     const handleRemoveMember = async (memberId) => {
-        const success = await removeMember(workspaceId, memberId);
-        if (success) {
-            setMembers(members.filter(member => member.id !== memberId));
+        try {
+            setIsLoading(true);
+            const success = await removeMember(workspaceId, memberId);
+            if (success) {
+                setMembers(members.filter(member => member.id !== memberId));
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -50,6 +57,7 @@ export default function WorkspaceMembersModal({ isOpen, onClose, workspaceId, wo
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <LoadingOverlay isVisible={isLoading} />
             <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl mx-4">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-gray-800 dark:text-white">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from "prop-types";
+import LoadingOverlay from '../LoadingOverlay.jsx';
 
 CreateWorkspaceModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -9,20 +10,27 @@ CreateWorkspaceModal.propTypes = {
 
 export default function CreateWorkspaceModal({ isOpen, onClose, onCreate }) {
     const [name, setName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (name.trim()) {
-            onCreate(name.trim());
-            setName('');
-            onClose();
+            try {
+                setIsLoading(true);
+                await onCreate(name.trim());
+                setName('');
+                onClose();
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <LoadingOverlay isVisible={isLoading} />
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
                 <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Créer un nouveau workspace</h3>
                 <form onSubmit={handleSubmit}>

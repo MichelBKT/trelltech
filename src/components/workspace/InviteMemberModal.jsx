@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PropTypes from "prop-types";
+import LoadingOverlay from '../LoadingOverlay.jsx';
 
 InviteMemberModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -11,8 +12,9 @@ InviteMemberModal.propTypes = {
 export default function InviteMemberModal({ isOpen, onClose, onInvite, boardId }) {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!boardId) {
             setError('Erreur: ID du tableau non disponible');
@@ -26,15 +28,21 @@ export default function InviteMemberModal({ isOpen, onClose, onInvite, boardId }
             setError('Veuillez entrer une adresse email valide');
             return;
         }
-        onInvite(boardId, email);
-        setEmail('');
-        setError('');
+        try {
+            setIsLoading(true);
+            await onInvite(boardId, email);
+            setEmail('');
+            setError('');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <LoadingOverlay isVisible={isLoading} />
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">Inviter un membre</h2>
