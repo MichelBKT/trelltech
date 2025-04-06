@@ -59,10 +59,8 @@ Home.propTypes = {
     boards: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-        prefs: PropTypes.shape({
-            backgroundColor: PropTypes.string
-        })
+
     })),
     selectedWorkspace: PropTypes.object,
-    workspaceColor: PropTypes.string
+    workspaceColor: PropTypes.func
 }; 

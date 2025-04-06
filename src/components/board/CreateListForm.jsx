@@ -5,7 +5,7 @@ import { createList } from '../../api/trelloApi';
 
 CreateListForm.propTypes = {
     boardId: PropTypes.string.isRequired,
-    onListCreated: PropTypes.func.isRequired,
+    onListCreated: PropTypes.func,
 };
 
 export default function CreateListForm({ boardId, onListCreated }) {

@@ -11,7 +11,7 @@ Card.propTypes = {
     listId: PropTypes.string.isRequired,
 };
 
-export default function Card({ card, onUpdate, index, listId }) {
+export default function Card({ card, onUpdate, index }) {
     const [isEditing, setIsEditing] = useState(false);
     const [cardName, setCardName] = useState(card.name);
     const [cardDesc, setCardDesc] = useState(card.desc || '');
@@ -83,7 +83,7 @@ export default function Card({ card, onUpdate, index, listId }) {
             {(provided, snapshot) => (
                 <>
                     <div
-                        className={`bg-white dark:bg-gray-700 p-3 rounded shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 ${
+                        className={`bg-white dark:bg-brandColor p-3 rounded shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 ${
                             snapshot.isDragging ? 'bg-blue-100' : ''
                         }`}
                         onClick={() => setIsEditing(true)}

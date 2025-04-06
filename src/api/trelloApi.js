@@ -262,31 +262,47 @@ export const inviteMember = async (boardId, email) => {
     }
 };
 
-export const updateListsOrder = async (boardId, reorderedLists, listData) => {
+export const updateListsOrder = async (boardId, lists) => {
     try {
-        const response = await trelloApi.put(`/boards/${boardId}/lists`, {
-            value: reorderedLists,
-            idBoard: listData.idBoard,
-            name: listData.name,
-
-        });
-        return await response.data || [];
+        // Mise à jour de toutes les positions en une seule fois
+        await Promise.all(
+            lists.map((list, index) =>
+                trelloApi.put(`/lists/${list.id}`, {
+                    pos: index * 1024 // Utilisation d'une valeur espacée pour les positions
+                })
+            )
+        );
+        showNotification('Ordre des listes mis à jour avec succès', 'success');
+        return true;
     } catch (error) {
-        console.error("Error updating list order:", error);
-        throw error;
+        await handleApiError(error);
+        return false;
     }
 };
 
 export const updateCardsOrder = async (listId, reorderedCards) => {
     try {
-        const response = await trelloApi.put(`/lists/${listId}/cards`, {
-            cards: reorderedCards,
-        });
+        const response = await trelloApi.put(`/lists/${listId}/cards`, reorderedCards);
         return await response.data || [];
 
     } catch (error) {
         console.error("Error updating card order:", error);
         throw error;
 
+    }
+};
+
+// Met à jour la position et la liste d'une carte
+export const updateCardPosition = async (cardId, newPos, newListId = null) => {
+    try {
+        const params = { pos: newPos };
+        if (newListId) {
+            params.idList = newListId;
+        }
+        const response = await trelloApi.put(`/cards/${cardId}`, null, { params });
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de la carte:', error);
+        throw error;
     }
 };

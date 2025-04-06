@@ -16,7 +16,7 @@ import { MenuContext } from "./MenuContext";
 
 Menu.propTypes = {
     onWorkspaceSelect: PropTypes.func.isRequired,
-}
+};
 
 export const getBoardColor = (boardId) => {
     const boardColors = {
@@ -40,7 +40,7 @@ export const getBoardColor = (boardId) => {
     return boardColors[colorIndex.toString()];
 };
 
-export default function Menu({ onWorkspaceSelect }) {
+export default function Menu({ onWorkspaceSelect = () => {} }) {
     const {isMenuOpen, setIsMenuOpen} = useContext(MenuContext);
     const [darkMode, setDarkMode] = useState(false);
     const [boards, setBoards] = useState([]);

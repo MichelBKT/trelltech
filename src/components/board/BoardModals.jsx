@@ -33,7 +33,7 @@ export default function DeleteBoardModal({ isOpen, onClose, onConfirm, boardName
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 dark:bg-pureDarkStroke bg-pureDarkBG opacity-80 flex items-center justify-center z-50">
+        <div className="fixed inset-0 dark:bg-pureDarkStroke bg-pureDarkBG flex items-center justify-center z-50">
             <div ref={modalRef} className="bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
                 <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">
                     Confirmer la suppression
