@@ -101,7 +101,7 @@ export default function BoardView({ boardId }) {
     }, [localLists, boardId, refreshData]);
 
     return (
-        <div className={`flex-1 p-4 ${isMenuOpen ? 'ml-64' : ''}`}>
+        <div className={`flex-1 overflow-x-hidden p-4 ${isMenuOpen ? 'ml-64' : 'ml-24'}`}>
             <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
                 <Droppable droppableId="board" type="LIST" direction="horizontal" isDropDisabled={false} isCombineEnabled={false} ignoreContainerClipping={false}>
                     {(provided) => (

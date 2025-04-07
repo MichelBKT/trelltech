@@ -58,7 +58,7 @@ export default function List({ list, onUpdate, index, boardId }) {
                 <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className="border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full"
+                    className="overflow-x-hidden border-1 border-gray-200 dark:border-pureDarkStroke rounded-2xl min-w-[280px] w-[280px] flex flex-col max-h-full"
                 >
                     <div className="p-3 flex justify-between items-center" {...provided.dragHandleProps}>
                         {isEditing ? (

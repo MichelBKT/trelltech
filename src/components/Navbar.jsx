@@ -51,20 +51,20 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
 
     return (
         <>
-            <div className="flex h-18 lg:w-384 min-md:w-346 min-sm:326 justify-between border-b-2 border-gray-200 dark:border-violet-950 bg-white dark:bg-pureDark dark:text-white duration-1000 content-center z-10 gap-4">
-                     {selectedWorkspace && (
+            <div className="flex h-18 lg:w-full justify-between border-b-2 border-gray-200 dark:border-violet-950 bg-white dark:bg-pureDark dark:text-white duration-1000 items-center z-10 gap-4 px-4">
+                {selectedWorkspace && (
                          <div className={`${isMenuOpen ? "left-72": "left-22" } w-20 gap-2 flex items-center relative left-32`}>
                              <Workspace color={workspaceColor} />
                              <span>{selectedWorkspace.name}</span>
                          </div>
                      )}
-                <div className="w-20 flex items-center relative left-12 lg:left-254">
+                <div className="w-20 flex items-center relative left-12 lg:left-250">
                     {userData && <NotificationCenter userId={userData.id}/>}
                     <NotificationManager ref={notificationManagerRef} />
                 </div>
                 <div className="max-md:invisible max-md:w-0 w-full flex p-2 text-black dark:text-white items-center justify-end gap-4 dark:bg-custom-pureDark">
                     <span>{greeting} {firstName || 'Utilisateur'}</span>
-                    <button 
+                    <button
                         onClick={handleLogout}
                         className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
                     >
@@ -73,9 +73,9 @@ export default function Navbar({ selectedWorkspace, workspaceColor }) {
                 </div>
                 <div className="p-2 px-6 text-black dark:text-white flex items-center text-xl">
                     {userData?.avatarHash ?(
-                        <img 
+                        <img
                             src={getAvatarUrl()}
-                            alt="Avatar" 
+                            alt="Avatar"
                             className="max-sm:w-12 w-18 object-fill rounded-full transition-all duration-200 relativemd:left-0 left-24"
                             onError={(e) => {
                                 console.error('Erreur de chargement de l\'avatar');

@@ -72,7 +72,7 @@ export default function Card({ card, onUpdate, index, boardId }) {
                     type="text"
                     value={cardName}
                     onChange={(e) => setCardName(e.target.value)}
-                    className="w-full mb-2 px-2 py-1 rounded dark:bg-gray-600 dark:text-white"
+                    className="w-full mb-2 px-2 py-1 rounded-3xl dark:bg-gray-600 dark:text-white"
                     placeholder="Titre de la carte"
                     autoFocus
                 />
@@ -106,7 +106,7 @@ export default function Card({ card, onUpdate, index, boardId }) {
             {(provided, snapshot) => (
                 <>
                     <div
-                        className={`bg-white dark:bg-brandColor p-3 rounded shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 ${
+                        className={`bg-white dark:bg-brandColor p-3 rounded-2xl shadow mb-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600 ${
                             snapshot.isDragging ? 'bg-blue-100' : ''
                         }`}
                         onClick={() => setIsEditing(true)}

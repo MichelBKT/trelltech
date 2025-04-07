@@ -28,19 +28,19 @@ export default function Home() {
     }
 
     return (
-        <div className="flex h-screen bg-pureLightBG dark:bg-pureDarkBG">
+        <div className="flex flex-row h-screen overflow-x-hidden">
             <Menu 
                 boards={boards} 
                 selectedWorkspace={selectedWorkspace} 
                 onWorkspaceSelect={handleWorkspaceSelect}
             />
-            <div className="flex-1 flex flex-col">
-                <Navbar 
+            <div className="flex-1 w-full flex flex-col overflow-hidden bg-pureLightBG dark:bg-pureDarkBG">
+                <Navbar
                     selectedWorkspace={selectedWorkspace}
                     workspaceColor={workspaceColor}
                     className={`${isMenuOpen ? "left-220" : "left-120"} transition-all duration-300`}
                 />
-                <div className="flex flex-col w-full h-full overflow-hidden p-4">
+                <div className="flex flex-col w-full flex-1 overflow-hidden p-4 my-18 bg-pureLightBG dark:bg-pureDarkBG">
                     {selectedWorkspace ? (
                         <BoardView
                             boardId={selectedWorkspace.id}
